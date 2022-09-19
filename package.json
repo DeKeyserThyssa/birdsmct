@@ -1,0 +1,22 @@
+{
+  "name": "birdsmct",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "npm run dev -w pwa"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DeKeyserThyssa/birdsmct.git"
+  },
+  "keywords": [],
+  "author": "TDK",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DeKeyserThyssa/birdsmct/issues"
+  },
+  "homepage": "https://github.com/DeKeyserThyssa/birdsmct#readme",
+  "workspaces": [
+    "pwa"
+  ]
+}
