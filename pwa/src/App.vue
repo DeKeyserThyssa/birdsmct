@@ -1,5 +1,7 @@
 <template>
-  <div class="text-red-500 text-6xl"><router-view></router-view></div>
+  <div class="text-6xl text-red-500">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script setup lang="ts"></script>
