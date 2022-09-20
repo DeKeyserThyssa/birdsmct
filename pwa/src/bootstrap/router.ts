@@ -4,6 +4,7 @@ import {
   Router,
   RouteRecordRaw,
 } from 'vue-router'
+// import ClientError from '../screens/generic/ClientError.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -11,8 +12,17 @@ const routes: RouteRecordRaw[] = [
     name: 'Home',
     component: () => import('../screens/Home.vue'),
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'ClientError',
+    // component: () => ClientError,
+    component: () => import('../screens/generic/ClientError.vue'),
+  },
 ]
 
-const router: Router = createRouter({ history: createWebHistory(), routes })
+const router: Router = createRouter({
+  history: createWebHistory(),
+  routes,
+})
 
 export default router
