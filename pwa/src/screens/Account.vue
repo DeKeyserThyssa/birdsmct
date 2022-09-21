@@ -1,5 +1,5 @@
 <template>
-  <h1>Hi, {{ user?.displayName }}</h1>
+  <h1 class="font-theme text-3xl font-bold">Hi, {{ user?.displayName }}</h1>
   <button @click="handleLogout">Log out</button>
 </template>
 
