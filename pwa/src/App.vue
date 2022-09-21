@@ -8,7 +8,8 @@ import useFirebase from './composables/useFirebase'
 export default {
   setup() {
     const {app} = useFirebase()
-    console.log(app)
+    
+    return {}
   },
 }
 </script>

@@ -3,6 +3,7 @@ import App from './App.vue'
 
 import '@unocss/reset/tailwind.css'
 import 'uno.css'
+
 import router from './bootstrap/router'
 import useAuthentication from './composables/useAuthentication'
 
@@ -10,6 +11,7 @@ const app: VueApp = createApp(App)
 
 const { restoreUser } = useAuthentication()
 
+// From here on, we need to wait
 ;(async function () {
   await restoreUser()
 

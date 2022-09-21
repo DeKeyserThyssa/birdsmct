@@ -5,6 +5,7 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
 } from '@firebase/auth'
+import { sendPasswordResetEmail } from 'firebase/auth'
 import { ref, Ref } from 'vue'
 import useFirebase from './useFirebase'
 
@@ -14,8 +15,6 @@ export default () => {
   const { auth } = useFirebase()
 
   const setUser = (u: User | null) => (user.value = u)
-
-  console.log(auth)
 
   const register = async (
     name: string,
@@ -42,7 +41,6 @@ export default () => {
     })
   }
 
-  // TODO: login
   const login = async (
     email: string,
     password: string,
@@ -50,10 +48,7 @@ export default () => {
     return new Promise((resolve, reject) => {
       signInWithEmailAndPassword(auth, email, password)
         .then((u: UserCredential) => {
-          console.log(u)
-
           setUser(u.user)
-
           resolve(user)
         })
 
@@ -90,11 +85,16 @@ export default () => {
     })
   }
 
-  // TODO: restore auth
 
   // TODO: forgot password
+  const forgotPassword = (email: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      sendPasswordResetEmail(auth, email)
+        .then(() => resolve())
+        .catch((error) => reject(error))
+    })
+  }
 
-  // TODO: track user
 
   return {
     user,
@@ -104,5 +104,6 @@ export default () => {
     logout,
     restoreUser,
     setUser,
+    forgotPassword,
   }
 }

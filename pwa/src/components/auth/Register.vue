@@ -87,6 +87,8 @@
 import { defineComponent, reactive, ref, Ref } from 'vue'
 import { X, Loader2 } from 'lucide-vue-next'
 import useAuthentication from '../../composables/useAuthentication'
+import { useRouter } from 'vue-router'
+
 
 export default defineComponent({
   components: {
@@ -96,6 +98,7 @@ export default defineComponent({
 
   setup() {
     const { register } = useAuthentication()
+    const { replace } = useRouter()
     const errorMessage: Ref<string> = ref('')
     const loading: Ref<boolean> = ref(false)
 
@@ -106,6 +109,7 @@ export default defineComponent({
     })
 
     const submitForm = () => {
+      loading.value = true
       if (
         userInput.name === '' ||
         userInput.email === '' ||
@@ -118,7 +122,7 @@ export default defineComponent({
       register(userInput.name, userInput.email, userInput.password)
         .then((u) => {
           console.log('User created: ', u)
-          // push('/')
+          return replace('/')
         })
         .catch((error) => {
           errorMessage.value = error.message
@@ -132,6 +136,7 @@ export default defineComponent({
       errorMessage,
       loading,
       userInput,
+      
       submitForm,
     }
   },
