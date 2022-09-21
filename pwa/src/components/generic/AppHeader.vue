@@ -1,38 +1,22 @@
 <template>
-  <header>
-    <div class="mr-6 pt-6">
-      <div class="flex items-center justify-between">
-        <Logo class="h-15 ml-3" />
-        <div class="flex gap-8">
-          <RouterLink to="/" class="font-theme text-3xl">Home</RouterLink>
-          <RouterLink to="/birds" class="font-theme text-3xl">Birds</RouterLink>
-          <RouterLink to="/log" class="font-theme text-3xl">Log</RouterLink>
-          <RouterLink to="/observations" class="font-theme text-3xl"
-            >Observations</RouterLink
-          >
-          <RouterLink to="/locations" class="font-theme text-3xl"
-            >Locations</RouterLink
-          >
-          <RouterLink to="/account" class="font-theme ml-4 text-3xl">{{
-            user?.displayName
-          }}</RouterLink>
-        </div>
-      </div>
-    </div>
+  <header class="px-6 py-6">
+    <nav class="mx-auto flex max-w-6xl items-center justify-between">
+      <router-link to="/" class="outline-none rounded-md focus-visible:ring-2"><Logo /></router-link>
+      <AppNavigation class="hidden sm:flex" />
+    </nav>
   </header>
 </template>
 
 <script lang="ts">
-import useAuthentication from '../../composables/useAuthentication'
+import AppNavigation from './AppNavigation.vue'
 import Logo from '../generic/Logo.vue'
 
 export default {
-  setup() {
-    const { user } = useAuthentication()
-    return {
-      user,
-    }
+  components: {
+    AppNavigation,
+    Logo,
   },
-  components: { Logo },
+
+  setup() {},
 }
 </script>
