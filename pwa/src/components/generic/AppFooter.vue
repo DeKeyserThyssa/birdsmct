@@ -2,7 +2,7 @@
   <div class="px-6 pt-3 pb-6">
     <footer class="mx-auto hidden max-w-6xl sm:block">
       <p class="text-sm text-neutral-800">
-        Martijn Loth - Disclaimer {{ new Date().getFullYear() }}
+        Thyssa De Keyser - Disclaimer {{ new Date().getFullYear() }}
       </p>
     </footer>
 
