@@ -5,7 +5,6 @@ import { CreateBirdInput } from './dto/create-bird.input';
 import { UpdateBirdInput } from './dto/update-bird.input';
 import { Bird } from './entities/bird.entity';
 import { ObjectId } from 'mongodb';
-import { retry } from 'rxjs';
 
 @Injectable()
 export class BirdsService {
@@ -33,7 +32,7 @@ export class BirdsService {
     return this.birdsRepository.findOne(new ObjectId(id))
   }
 
-  update(updateBirdInput: UpdateBirdInput) {
+  update(id: string, updateBirdInput: UpdateBirdInput): Promise<Bird> {
     const update = new Bird()
     update.id = new ObjectId(updateBirdInput.id)
     update.name = updateBirdInput.name

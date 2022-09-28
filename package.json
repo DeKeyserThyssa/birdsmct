@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "npm run start:dev -w api"
+    "dev": "start npm run dev -w pwa && npm run start:dev -w api"
   },
   "repository": {
     "type": "git",

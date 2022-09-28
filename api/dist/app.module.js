@@ -13,6 +13,8 @@ const typeorm_1 = require("@nestjs/typeorm");
 const graphqlConfig_1 = require("./bootstrap/graphqlConfig");
 const typeORMConfig_1 = require("./bootstrap/typeORMConfig");
 const birds_module_1 = require("./birds/birds.module");
+const areas_module_1 = require("./areas/areas.module");
+const observations_module_1 = require("./observations/observations.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -21,6 +23,8 @@ AppModule = __decorate([
             typeorm_1.TypeOrmModule.forRoot(typeORMConfig_1.typeORMConfig),
             graphql_1.GraphQLModule.forRoot(graphqlConfig_1.graphqlConfig),
             birds_module_1.BirdsModule,
+            areas_module_1.AreasModule,
+            observations_module_1.ObservationsModule,
         ],
         controllers: [],
         providers: [],
