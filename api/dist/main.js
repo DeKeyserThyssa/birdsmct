@@ -6,7 +6,7 @@ async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const port = +process.env.PORT || 3003;
     await app.listen(port);
-    console.info(`Welcome to the server.\nVisit http://localhost:${port}/`);
+    console.info(`Welcome to the server.\nVisit http://localhost:${port}/graphql`);
 }
 bootstrap();
 //# sourceMappingURL=main.js.map

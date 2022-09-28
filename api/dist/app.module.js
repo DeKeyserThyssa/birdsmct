@@ -12,13 +12,15 @@ const graphql_1 = require("@nestjs/graphql");
 const typeorm_1 = require("@nestjs/typeorm");
 const graphqlConfig_1 = require("./bootstrap/graphqlConfig");
 const typeORMConfig_1 = require("./bootstrap/typeORMConfig");
+const birds_module_1 = require("./birds/birds.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forRoot(typeORMConfig_1.typeORMConfig),
-            graphql_1.GraphQLModule.forRoot(graphqlConfig_1.graphqlConfig)
+            graphql_1.GraphQLModule.forRoot(graphqlConfig_1.graphqlConfig),
+            birds_module_1.BirdsModule,
         ],
         controllers: [],
         providers: [],
