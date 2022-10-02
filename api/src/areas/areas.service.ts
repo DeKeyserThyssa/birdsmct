@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CreateAreaInput } from './dto/create-area.input';
 import { UpdateAreaInput } from './dto/update-area.input';
 import { Area } from './entities/area.entity';
@@ -35,7 +35,7 @@ export class AreasService {
     return this.areaRepository.save(update) // save gives us an advantage
   }
 
-  remove(id: string) {
+  remove(id: string): Promise<DeleteResult> {
     return this.areaRepository.delete(new ObjectId(id));
   }
 }

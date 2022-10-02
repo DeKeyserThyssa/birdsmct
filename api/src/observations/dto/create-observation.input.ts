@@ -1,7 +1,16 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Int, Field } from '@nestjs/graphql'
 
 @InputType()
 export class CreateObservationInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field() // GraphQL
+  name: string
+
+  @Field() // GraphQL
+  userId: string
+
+  @Field() // GraphQL
+  weather: string
+
+  @Field() //graphql
+  birdId: string
 }

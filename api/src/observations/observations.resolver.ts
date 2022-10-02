@@ -12,25 +12,18 @@ import { Observation } from './entities/observation.entity'
 import { CreateObservationInput } from './dto/create-observation.input'
 import { UpdateObservationInput } from './dto/update-observation.input'
 import { BirdsService } from 'src/birds/birds.service'
-import { Area } from 'src/areas/entities/area.entity'
-import { AreasService } from 'src/areas/areas.service'
+import { ClientMessage, MessageTypes } from 'src/entities/ClientMessage'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
   constructor(
     private readonly observationsService: ObservationsService,
     private readonly birdService: BirdsService,
-    private readonly areaService: AreasService
   ) {}
 
   @ResolveField()
   bird(@Parent() o: Observation) {
     return this.birdService.findOne(o.birdId)
-  }
-
-  @ResolveField()
-  area(@Parent() o: Observation): Promise<Area> {
-    return this.areaService.findOne(o.areaId)
   }
 
   @Mutation(() => Observation)
@@ -42,12 +35,14 @@ export class ObservationsResolver {
   }
 
   @Query(() => [Observation], { name: 'observations' })
-  findAll() {
+  findAll(): Promise<Observation[]> {
     return this.observationsService.findAll()
   }
 
   @Query(() => Observation, { name: 'observation' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<Observation> {
     return this.observationsService.findOne(id)
   }
 
@@ -55,15 +50,29 @@ export class ObservationsResolver {
   updateObservation(
     @Args('updateObservationInput')
     updateObservationInput: UpdateObservationInput,
-  ) {
+  ): Promise<Observation> {
     return this.observationsService.update(
       updateObservationInput.id,
       updateObservationInput,
     )
   }
 
-  @Mutation(() => Observation)
-  removeObservation(@Args('id', { type: () => Int }) id: number) {
-    return this.observationsService.remove(id)
+  @Mutation(() => ClientMessage)
+  async removeObservation(
+    @Args('id', { type: () => String }) id: string,
+  ): Promise<ClientMessage> {
+    const deleted = await this.observationsService.remove(id)
+    if (deleted.affected <= 1)
+      return {
+        type: MessageTypes.succes,
+        message: 'Observation deleted',
+        statusCode: 200,
+      }
+
+    return {
+      type: MessageTypes.error,
+      message: 'Delete action went very long',
+      statusCode: 400,
+    }
   }
 }
