@@ -12,7 +12,7 @@ import { Observation } from './entities/observation.entity'
 import { CreateObservationInput } from './dto/create-observation.input'
 import { UpdateObservationInput } from './dto/update-observation.input'
 import { BirdsService } from 'src/birds/birds.service'
-import { ClientMessage, MessageTypes } from 'src/entities/ClientMessage'
+import { ClientMessage, MessageTypes } from 'src/bootstrap/entities/ClientMessage'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
