@@ -14,13 +14,19 @@ export class ObservationsService {
   ) {}
 
   create(createObservationInput: CreateObservationInput): Promise<Observation> {
+    // return 'This action adds a new observation'
     const o = new Observation()
     o.name = createObservationInput.name
-    o.userId = createObservationInput.userId
+    o.description = createObservationInput.description
     o.weather = createObservationInput.weather
+    // o.birds = createObservationInput.bird
     o.birdId = createObservationInput.birdId
-    return this.observationRepository.save(o);
+    // o.area = createObservationInput.area
+    o.areaId = createObservationInput.areaId
+    o.active = createObservationInput.active
+    return this.observationRepository.save(o)
   }
+
 
   findAll(): Promise<Observation[]>  {
     return this.observationRepository.find();
@@ -32,10 +38,15 @@ export class ObservationsService {
 
   update(id: string, updateObservationInput: UpdateObservationInput): Promise<Observation> {
     const update = new Observation()
-    update.id = new ObjectId(updateObservationInput.id)
+    update.id = updateObservationInput.id
     update.name = updateObservationInput.name
-    update.userId = updateObservationInput.userId
+    update.description = updateObservationInput.description
     update.weather = updateObservationInput.weather
+    // update.birds = updateObservationInput.bird
+    update.birdId = updateObservationInput.birdId
+    // update.location = updateObservationInput.location
+    update.areaId = updateObservationInput.areaId
+    update.active = updateObservationInput.active
     return this.observationRepository.save(update)
   }
 

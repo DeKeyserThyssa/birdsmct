@@ -13,17 +13,26 @@ import { CreateObservationInput } from './dto/create-observation.input'
 import { UpdateObservationInput } from './dto/update-observation.input'
 import { BirdsService } from 'src/birds/birds.service'
 import { ClientMessage, MessageTypes } from 'src/bootstrap/entities/ClientMessage'
+import { Area } from 'src/areas/entities/area.entity'
+import { AreasService } from 'src/areas/areas.service'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
   constructor(
     private readonly observationsService: ObservationsService,
     private readonly birdService: BirdsService,
+    private readonly areaService: AreasService,
   ) {}
 
   @ResolveField()
   bird(@Parent() o: Observation) {
     return this.birdService.findOne(o.birdId)
+  }
+
+  @ResolveField()
+  area(@Parent() o: Observation): Promise<Area> {
+    //@ts-ignore
+    return this.areaService.findOne(o.areaId)
   }
 
   @Mutation(() => Observation)

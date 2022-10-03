@@ -40,10 +40,14 @@ export class Observation {
   @Column()
   areaId: string
 
-  @Field({nullable: true})
+  @Field({ nullable: true })
+  @Column()
+  description?: string
+
+  @Field({ nullable: true })
   @Column()
   active?: boolean
-
+  
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })
   createdAt?: Date

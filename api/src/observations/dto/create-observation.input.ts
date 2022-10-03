@@ -8,9 +8,24 @@ export class CreateObservationInput {
   @Field() // GraphQL
   userId: string
 
+  // @Field(() => Bird)
+  // bird: Bird
+
+  @Field()
+  birdId: string
+
+  // @Field(() => Area)
+  // area: Area
+
+  @Field()
+  areaId: string
+
   @Field() // GraphQL
   weather: string
 
-  @Field() //graphql
-  birdId: string
+  @Field({ nullable: true })
+  description?: string
+
+  @Field({ nullable: true })
+  active?: boolean
 }
