@@ -14,7 +14,7 @@ import { UpdateAreaInput } from './dto/update-area.input'
 import { Observation } from 'src/observations/entities/observation.entity'
 import { BirdsService } from 'src/birds/birds.service'
 import { Bird } from 'src/birds/entities/bird.entity'
-import { ClientMessage, MessageTypes } from 'src/entities/ClientMessage'
+import { ClientMessage, MessageTypes } from 'src/bootstrap/entities/ClientMessage'
 
 @Resolver(() => Area)
 export class AreasResolver {
