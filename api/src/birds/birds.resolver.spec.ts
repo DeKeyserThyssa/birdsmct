@@ -5,7 +5,10 @@ import { CreateBirdInput } from './dto/create-bird.input'
 import { Bird } from './entities/bird.entity'
 import { createBird, createBirdInputStub } from './stubs/birds.stub'
 import { ObjectId } from 'mongodb'
-import { MessageTypes } from '../bootstrap/entities/ClientMessage'
+import {
+  ClientMessage,
+  MessageTypes,
+} from '../bootstrap/entities/ClientMessage'
 
 describe('BirdsResolver', () => {
   let resolver: BirdsResolver
@@ -23,7 +26,7 @@ describe('BirdsResolver', () => {
             findAll: jest.fn().mockResolvedValue([createBird()]),
             findOne: jest.fn().mockResolvedValue(createBird()),
             update: jest.fn().mockResolvedValue(createBird()),
-            remove: jest.fn().mockResolvedValue( {affected: 1}),
+            remove: jest.fn().mockResolvedValue({ affected: 1 }),
           },
         },
       ],
@@ -49,113 +52,113 @@ describe('BirdsResolver', () => {
     describe('When createBird is called', () => {
       it('should call the service create method', async () => {
         expect(service.create).toBeCalledTimes(1)
-      });
+      })
 
       it('should return the created bird', async () => {
         expect(resultBird).toEqual(createBird())
-      });
-    });
+      })
+    })
   })
 
   describe('findAll', () => {
-    let resultBirds: Bird[]
+    let result: Bird[]
     beforeEach(async () => {
-      resultBirds = await resolver.findAll()
+      result = await resolver.findAll()
     })
 
     describe('When findAll is called', () => {
-      it('should call the service findAll method', async () => {
-        expect(service.findAll).toBeCalledTimes(1)
-      });
+      // it.todo('should call birdService.findAll()', async () => {
+      // });
 
-      it('should return the created bird', async () => {
-        expect(resultBirds).toEqual([createBird()])
-      });
+      it('should call birdService.findAll()', async () => {
+        expect(service.findAll).toBeCalledTimes(1)
+      })
+
+      // REMARK: 2 manieren om arrays aan te duiden
+      // Bird[]
+      // [Bird]
+
+      it('should return some (or one) bird(s)', async () => {
+        expect(result).toEqual([createBird()])
+      })
     })
   })
 
   describe('findOne', () => {
-    let resultBird: Bird
+    let result: Bird
     beforeEach(async () => {
-      resultBird = await resolver.findOne(createBird().id)
+      result = await resolver.findOne(createBird().id)
     })
 
-    describe('When findOne is called', () => {
-      it('should call the service findOne method', async () => {
+    describe('check service findOne implementation', () => {
+      it('should call birdService correct', () => {
         expect(service.findOne).toBeCalledTimes(1)
-      });
-
-      it('should call birdsService.findOne with the correct params', async () => {
         expect(service.findOne).toBeCalledWith(createBird().id)
       })
 
-      it('should return the created bird', async () => {
-        expect(resultBird).toEqual(createBird())
-      });
+      it('should return the created bird', () => {
+        expect(result).toEqual(createBird())
+      })
     })
   })
 
-  describe('updateBird', () => {
-    let resultBird: Bird
+  describe('update', () => {
+    let result: Bird
     beforeEach(async () => {
-      resultBird = await resolver.updateBird(createBird())
+      result = await resolver.updateBird(createBird())
     })
 
-    describe('When updateBird is called', () => {
-      it('should call the service update method', async () => {
+    describe('check service update implementation', () => {
+      it('should call the service update method', () => {
         expect(service.update).toBeCalledTimes(1)
-      });
-
-      it('should call birdsService.update with the correct params', async () => {
         expect(service.update).toBeCalledWith(createBird().id, createBird())
       })
 
-      it('should return the created bird', async () => {
-        expect(resultBird).toEqual(createBird())
-      });
+      it('should return the updated bird', () => {
+        expect(result).toEqual(createBird())
+      })
     })
   })
 
-  describe('removeBird', () => {
-    let res: any
+  describe('remove', () => {
+    let result: ClientMessage
     beforeEach(async () => {
-      res = await resolver.removeBird(createBird().id)
+      result = await resolver.removeBird(createBird().id)
     })
 
-    describe('When removeBird is called', () => {
-      it('should call the service remove method', async () => {
+    describe('Check the service implementation', () => {
+      it('is the remove function called correctly', async () => {
         expect(service.remove).toBeCalledTimes(1)
-      });
-
-      it('should call birdsService.remove with the correct params', async () => {
-        expect(service.remove).toBeCalledWith(new ObjectId (createBird().id))
+        expect(service.remove).toBeCalledWith(createBird().id)
       })
 
-      it('should return the correct message', async () => {
-        jest
-          .spyOn(service, 'remove')
-          .mockResolvedValue({affected: 1, raw: ''})
+      describe('check the GraphQL return', () => {
+        it('is the message clear to the frontend', async () => {
+          const expectResult: ClientMessage = {
+            type: MessageTypes.succes,
+            message: 'Bird deleted', // Zelfde als in de resolver code
+            statusCode: 200,
+          }
 
-        res = await resolver.removeBird(createBird().id)
-        expect(res).toEqual({
-          type: MessageTypes.succes,
-          message: 'Bird deleted',
-          statusCode: 200,
+          expect(result).toEqual(expectResult)
         })
-      });
 
-      // it('should return the correct error message', async () => {
-      //   jest
-      //     .spyOn(service, 'remove')
-      //     .mockResolvedValue({affected: 5, raw: ''})
+        it('is the error message shown when something goes wrong', async () => {
+          jest
+            .spyOn(service, 'remove')
+            .mockResolvedValue({ affected: 500, raw: '' })
 
-      //   res = await resolver.removeBird(createBird().id)
-      //   expect(res).toEqual({
-      //     type: MessageTypes.error,
-      //     message: 'Delete action went very wrong',
-      //     statusCode: 400,
-      //   })
-      // });
+          result = await resolver.removeBird(createBird().id)
+
+          const expectResult: ClientMessage = {
+            type: MessageTypes.error,
+            message: 'Delete action went very long', // Zelfde als in de resolver code
+            statusCode: 400,
+          }
+
+          expect(result).toEqual(expectResult)
+        })
+      })
     })
   })
 })
