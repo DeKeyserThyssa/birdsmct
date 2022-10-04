@@ -5,6 +5,7 @@
         Thyssa De Keyser - Disclaimer {{ new Date().getFullYear() }}
       </p>
     </footer>
+
     <nav class="block sm:hidden">
       <AppNavigation />
     </nav>
@@ -13,7 +14,6 @@
 
 <script lang="ts">
 import AppNavigation from './AppNavigation.vue'
-
 export default {
   components: {
     AppNavigation,
