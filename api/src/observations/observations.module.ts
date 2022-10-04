@@ -10,7 +10,7 @@ import { AreasService } from 'src/areas/areas.service'
 import { Area } from 'src/areas/entities/area.entity'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Bird, Area, Observation]), BirdsModule],
+  imports: [TypeOrmModule.forFeature([Bird, Area, Observation])],
   providers: [
     ObservationsResolver,
     ObservationsService,

@@ -70,7 +70,7 @@ describe('BirdsResolver', () => {
       // it.todo('should call birdService.findAll()', async () => {
       // });
 
-      it('should call birdService.findAll()', async () => {
+      it('should call birdService.findAll()', () => {
         expect(service.findAll).toBeCalledTimes(1)
       })
 
@@ -78,7 +78,7 @@ describe('BirdsResolver', () => {
       // Bird[]
       // [Bird]
 
-      it('should return some (or one) bird(s)', async () => {
+      it('should return some (or one) bird(s)', () => {
         expect(result).toEqual([createBird()])
       })
     })
@@ -111,7 +111,7 @@ describe('BirdsResolver', () => {
     describe('check service update implementation', () => {
       it('should call the service update method', () => {
         expect(service.update).toBeCalledTimes(1)
-        expect(service.update).toBeCalledWith(createBird().id, createBird())
+        expect(service.update).toBeCalledWith(createBird())
       })
 
       it('should return the updated bird', () => {

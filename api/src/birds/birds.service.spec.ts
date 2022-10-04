@@ -83,15 +83,15 @@ describe('BirdsService', () => {
   describe('findOne', () => {
     describe('when findOne is called', () => {
       it('should call the repository findOne method', async () => {
-        const findOneSpy = jest.spyOn(mockBirdsRepository, 'findOne')
+        const findSpy = jest.spyOn(mockBirdsRepository, 'findOne')
         await service.findOne('8cb8791bdee8')
-        expect(findOneSpy).toBeCalledTimes(1)
+        expect(findSpy).toBeCalledTimes(1)
       })
 
       it('should be called with the correct params', async () => {
-        const findOneSpy = jest.spyOn(mockBirdsRepository, 'findOne')
+        const findSpy = jest.spyOn(mockBirdsRepository, 'findOne')
         await service.findOne('8cb8791bdee8')
-        expect(findOneSpy).toBeCalledWith(new ObjectId('8cb8791bdee8'))
+        expect(findSpy).toBeCalledWith(new ObjectId('8cb8791bdee8'))
       })
 
       it('should return the bird', async () => {
@@ -107,21 +107,21 @@ describe('BirdsService', () => {
       it('should call the repository save method', async () => {
         const saveSpy = jest.spyOn(mockBirdsRepository, 'save')
         const newBird = createBird()
-        await service.update(newBird.id, newBird)
+        await service.update(newBird)
         expect(saveSpy).toBeCalledTimes(1)
       })
 
       it('should be called with the correct params', async () => {
         const saveSpy = jest.spyOn(mockBirdsRepository, 'save')
         const newBird = createBird()
-        await service.update(newBird.id, newBird)
+        await service.update(newBird)
         expect(saveSpy).toBeCalledWith(newBird)
       })
 
       it('should return the updated bird', async () => {
         const toReturnedBird = createBird()
         const newBird = createBird()
-        const result = await service.update(newBird.id, newBird)
+        const result = await service.update(newBird)
         expect(result).toEqual(toReturnedBird)
       })
     })

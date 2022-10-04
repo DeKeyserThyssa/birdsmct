@@ -20,8 +20,8 @@
     </li>
 
     <li>
-      <Scroll class="mx-auto mb-2 h-5 sm:hidden" />
-      <router-link class="px-3 py-6" to="/log">Log</router-link>
+      <User class="mx-auto mb-2 h-5 sm:hidden" />
+      <router-link class="px-3 py-6" to="/account">User</router-link>
     </li>
 
     <li class="hidden pl-6 sm:block">
@@ -37,10 +37,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Home, Feather, Scroll, Clipboard } from 'lucide-vue-next'
+import { Home, Feather, User, Clipboard } from 'lucide-vue-next'
 import useAuthentication from '../../composables/useAuthentication'
 export default defineComponent({
-  components: { Home, Feather, Scroll, Clipboard },
+  components: { Home, Feather, User, Clipboard },
   setup() {
     const { user } = useAuthentication()
     return {

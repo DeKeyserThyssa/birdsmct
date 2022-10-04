@@ -1,13 +1,19 @@
 <template>
-  <h1 class="font-theme text-3xl font-bold">Hi, {{ user?.displayName }}</h1>
-  <button @click="handleLogout">Log out</button>
+  <route-holder :title="`Hi, ${user?.displayName}`">
+    <button @click="handleLogout">Log out</button>
+  </route-holder>
 </template>
 
 <script lang="ts">
+import RouteHolder from '../components/holders/RouteHolder.vue'
 import useAuthentication from '../composables/useAuthentication'
 import { useRouter } from 'vue-router'
 
 export default {
+  components: {
+    RouteHolder,
+  },
+  
   setup() {
     const { user, logout } = useAuthentication()
     const { replace } = useRouter()
@@ -18,7 +24,7 @@ export default {
       })
     }
     return {
-      user, 
+      user,
       handleLogout,
     }
   },

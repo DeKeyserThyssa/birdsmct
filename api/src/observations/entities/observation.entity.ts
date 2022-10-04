@@ -10,23 +10,24 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-@ObjectType()
+@Entity()
+@ObjectType({ description: 'observations' })
 export class Observation {
   @Field(() => ID) // GraphQL
   @ObjectIdColumn() //typeORM // Map this field to the (generated) _id column in the database
-  id: string
+  id: ObjectId
 
   @Field() // GraphQL
   @Column() //typeORM
   name: string
 
-  @Field() 
-  @Column() 
-  userId: string
+  @Field({nullable: true}) 
+  @Column({nullable: true}) 
+  userId?: string
 
   @Field({nullable: true}) 
   @Column({nullable: true}) 
-  weather: string
+  weather?: string
 
   @Field(() => Bird)
   bird: Bird
