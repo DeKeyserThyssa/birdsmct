@@ -23,7 +23,7 @@
             v-model="observationInput.name"
             id="name"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
-            type="name"
+            type="text"
             name="name"
           />
         </label>
@@ -42,7 +42,9 @@
             id="birdId"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
           >
-            <option selected disabled>Pick a bird species</option>
+            <option value="Pick a bird species" selected disabled>
+              Pick a bird species
+            </option>
             <option v-for="b of result.birds" :key="b.id" :value="b">
               {{ b.name }}
             </option>
@@ -64,9 +66,11 @@
             id="areaId"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
           >
-            <option selected disabled>Pick a location</option>
-            <option v-for="b of result.areas" :key="b.id" :value="b">
-              {{ b.name }}
+            <option value="Pick a location" selected disabled>
+              Pick a location
+            </option>
+            <option v-for="a of result.areas" :key="a.id" :value="a.id">
+              {{ a.name }}
             </option>
           </select>
         </label>
@@ -83,7 +87,6 @@
             name="description"
             id="description"
             cols="30"
-            rows="10"
           >
           </textarea>
         </label>
@@ -98,10 +101,9 @@
           <input
             v-model="observationInput.eather"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            type="text"
             name="weather"
             id="weather"
-            cols="30"
-            rows="10"
           />
         </label>
       </div>
@@ -114,14 +116,6 @@
           <Loader2 class="animate-spin" />
         </div>
       </button>
-      <p>
-        <RouterLink
-          to="/auth/register"
-          class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring"
-        >
-          Don't have an account yet?
-        </RouterLink>
-      </p>
     </form>
   </route-holder>
 </template>
@@ -167,7 +161,8 @@ export default {
 
     const observationInput = reactive({
       name: 'Beautiful bird',
-      description: 'A beautiful common buzzard (buteo buteo) flying over Kortrijk.',
+      description:
+        'A beautiful common buzzard (buteo buteo) flying over Kortrijk.',
       weather: 'Overcast, clouded',
       birdId: 'Buizerd',
       areaId: 'Magdalenapark',
