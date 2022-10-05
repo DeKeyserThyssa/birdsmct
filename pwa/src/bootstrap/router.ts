@@ -23,6 +23,10 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../screens/birds/index.vue'),
       },
       {
+        path: 'birds/:id',
+        component: () => import('../screens/birds/_id.vue'),
+      },
+      {
         path: 'locations',
         component: () => import('../screens/locations/index.vue'),
       },

@@ -19,6 +19,7 @@ export class ObservationsService {
     o.name = createObservationInput.name
     o.description = createObservationInput.description
     o.weather = createObservationInput.weather
+    o.userId = createObservationInput.userId
     // o.birds = createObservationInput.bird
     o.birdId = createObservationInput.birdId
     // o.area = createObservationInput.area

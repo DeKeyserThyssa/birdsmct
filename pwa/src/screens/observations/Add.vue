@@ -45,7 +45,7 @@
             <option value="Pick a bird species" selected disabled>
               Pick a bird species
             </option>
-            <option v-for="b of result.birds" :key="b.id" :value="b">
+            <option v-for="b of result.birds" :key="b.id" :value="b.id">
               {{ b.name }}
             </option>
           </select>
@@ -99,7 +99,7 @@
         >
           <span class="mb-2 block">Weather</span>
           <input
-            v-model="observationInput.eather"
+            v-model="observationInput.weather"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
             type="text"
             name="weather"

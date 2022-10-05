@@ -1,12 +1,16 @@
 <template>
-    <route-holder title="Observations"></route-holder>
+  <route-holder title="Observations">
+    <ObservationsTable />
+  </route-holder>
 </template>
 
 <script lang="ts">
 import RouteHolder from '../../components/holders/RouteHolder.vue'
-export default({
-    components: {
-        RouteHolder,
-    },
-})
+import ObservationsTable from '../../components/observation/ObservationsTable.vue'
+export default {
+  components: {
+    RouteHolder,
+    ObservationsTable,
+  },
+}
 </script>
