@@ -17,6 +17,8 @@ export class AreasService {
   create(createAreaInput: CreateAreaInput): Promise<Area> {
     const a = new Area()
     a.name = createAreaInput.name
+    // a.observationsId = createAreaInput.observationsId
+    a.area = createAreaInput.area
     return this.areaRepository.save(a);
   }
 
@@ -24,14 +26,16 @@ export class AreasService {
     return this.areaRepository.find();
   }
 
-  findOne(id: string) {
+  findOne(id: string): Promise<Area> {
     return this.areaRepository.findOne(new ObjectId(id))
   }
 
-  update(id: string, updateBirdInput: UpdateAreaInput): Promise<Area> {
+  update(updateAreaInput: UpdateAreaInput) {
     const update = new Area()
-    update.id = new ObjectId(updateBirdInput.id)
-    update.name = updateBirdInput.name
+    update.id = new ObjectId(updateAreaInput.id)
+    update.name = updateAreaInput.name
+    // update.observationsId = updateLocationInput.observationsId
+    update.area = updateAreaInput.area
     return this.areaRepository.save(update) // save gives us an advantage
   }
 

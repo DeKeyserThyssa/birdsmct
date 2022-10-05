@@ -34,6 +34,13 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: 'observations/add',
+        component: () => import('../screens/observations/Add.vue'),
+        meta: {
+          needsAuthentication: true,
+        },
+      },
+      {
         path: 'log',
         component: () => import('../screens/log/index.vue'),
         meta: {

@@ -12,24 +12,27 @@ import { Area } from './entities/area.entity'
 import { CreateAreaInput } from './dto/create-area.input'
 import { UpdateAreaInput } from './dto/update-area.input'
 import { Observation } from 'src/observations/entities/observation.entity'
-import { BirdsService } from 'src/birds/birds.service'
-import { Bird } from 'src/birds/entities/bird.entity'
-import { ClientMessage, MessageTypes } from 'src/bootstrap/entities/ClientMessage'
+import {
+  ClientMessage,
+  MessageTypes,
+} from '../bootstrap/entities/ClientMessage'
+import { ObservationsService } from '../observations/observations.service'
 
 @Resolver(() => Area)
 export class AreasResolver {
   constructor(
     private readonly areasService: AreasService,
-    private readonly birdService: BirdsService,
+    private readonly observationService: ObservationsService,
   ) {}
 
-  @ResolveField()
-  bird(@Parent() a: Area) {
-    return this.birdService.findOne(a.birdId)
-  }
-
+  // @ResolveField()
+  // observations(@Parent() a: Area) {
+  //   return this.observationService.findOne(a.observationId)
+  // }
   @Mutation(() => Area)
-  createArea(@Args('createAreaInput') createAreaInput: CreateAreaInput) {
+  createArea(
+    @Args('createAreaInput') createAreaInput: CreateAreaInput,
+  ): Promise<Area> {
     return this.areasService.create(createAreaInput)
   }
 
@@ -47,10 +50,10 @@ export class AreasResolver {
   updateArea(
     @Args('updateAreaInput') updateAreaInput: UpdateAreaInput,
   ): Promise<Area> {
-    return this.areasService.update(updateAreaInput.id, updateAreaInput)
+    return this.areasService.update(updateAreaInput)
   }
 
-  @Mutation(() => ClientMessage)
+  @Mutation(() => Area)
   async removeArea(
     @Args('id', { type: () => String }) id: string,
   ): Promise<ClientMessage> {

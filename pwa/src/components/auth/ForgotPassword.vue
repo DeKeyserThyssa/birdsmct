@@ -1,16 +1,31 @@
 <template>
-  <form @submit.prevent="">
+  <form @submit.prevent="submitForm">
     <header>
       <h2 class="mb-6 text-3xl">Forgot password</h2>
     </header>
 
-    <div class="mt-3">
+    <div
+      v-if="errorMessage"
+      class="mb-3 flex items-center justify-between rounded-md bg-red-100 px-3 py-1"
+    >
+      <p class="text-sm text-red-600">{{ errorMessage }}</p>
+
+      <button
+        @click="errorMessage = ''"
+        class="rounded-full p-3 ring-red-600 hover:bg-red-200 focus:outline-none focus:ring-2"
+      >
+        <X class="h-4 w-4 text-red-600" />
+      </button>
+    </div>
+
+    <div>
       <label
         class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
         for="email"
       >
         <span class="mb-2 block">Email</span>
         <input
+          v-model="userInput.email"
           id="email"
           class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
           type="email"
@@ -28,7 +43,7 @@
         <Loader2 class="animate-spin" />
       </div>
     </button>
-    <p>
+    <p class="mt-3 text-center text-sm">
       <RouterLink
         to="/auth/login"
         class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring"

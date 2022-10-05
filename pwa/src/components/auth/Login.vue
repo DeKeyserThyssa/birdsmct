@@ -16,7 +16,7 @@
         <X class="h-4 w-4 text-red-600" />
       </button>
     </div>
-    <div class="mt-3">
+    <div>
       <label
         class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
         for="email"
@@ -47,7 +47,7 @@
           autocomplete="current-password"
         />
       </label>
-      <p>
+      <p class="mt-1 text-sm font-normal opacity-40 hover:opacity-100">
       <RouterLink
         to="/auth/forgot-password"
         class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring"
@@ -65,7 +65,7 @@
         <Loader2 class="animate-spin" />
       </div>
     </button>
-    <p>
+    <p class="mt-3 text-center text-sm">
       <RouterLink
         to="/auth/register"
         class="rounded-md outline-none ring-neutral-300 hover:underline focus-visible:ring"

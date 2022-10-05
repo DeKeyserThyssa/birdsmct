@@ -15,6 +15,7 @@ import { BirdsService } from 'src/birds/birds.service'
 import { ClientMessage, MessageTypes } from 'src/bootstrap/entities/ClientMessage'
 import { Area } from 'src/areas/entities/area.entity'
 import { AreasService } from 'src/areas/areas.service'
+import { Bird } from 'src/birds/entities/bird.entity'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
@@ -25,7 +26,7 @@ export class ObservationsResolver {
   ) {}
 
   @ResolveField()
-  bird(@Parent() o: Observation) {
+  bird(@Parent() o: Observation): Promise<Bird> {
     return this.birdService.findOne(o.birdId)
   }
 

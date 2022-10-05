@@ -4,4 +4,7 @@ import { InputType, Int, Field } from '@nestjs/graphql';
 export class CreateAreaInput {
   @Field() // GraphQL
   name: string;
+
+  @Field()
+  area: string
 }

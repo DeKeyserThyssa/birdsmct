@@ -6,22 +6,16 @@ export class CreateObservationInput {
   name: string
 
   @Field() // GraphQL
-  userId: string
-
-  // @Field(() => Bird)
-  // bird: Bird
+  userId?: string
 
   @Field()
   birdId: string
-
-  // @Field(() => Area)
-  // area: Area
 
   @Field()
   areaId: string
 
   @Field() // GraphQL
-  weather: string
+  weather?: string
 
   @Field({ nullable: true })
   description?: string
