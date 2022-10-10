@@ -9,7 +9,7 @@
         Add location
       </RouterLink>
     </template>
-    <MapView />
+    <MapView class="h-screen"/>
   </route-holder>
 </template>
 

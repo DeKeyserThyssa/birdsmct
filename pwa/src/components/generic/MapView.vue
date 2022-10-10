@@ -1,48 +1,50 @@
 <template>
-  <div ref="map"></div>
+  <div ref="mapContainer"></div>
 </template>
 
 <script lang="ts">
-import 'mapbox-gl/dist/mapbox-gl.css'
+//https://docs.mapbox.com/mapbox-gl-js/guides/install/
+//https://leafletjs.com/
+//login maken
+//todo: set developer API in .env
+
+//props
+//todo: set coordinates of map
+//todo: set marker on map
+//todo: set polygon on map
+
+//emit (iets terugsturen naar bovenliggende parent)
+//todo: return coordinates of tap/click on map
+
+//api
+//todo: replace location with coordinates
+
 import mapboxgl from 'mapbox-gl'
-import { onMounted, ref } from 'vue-demi'
-// TODO: set developer API in .env
-
-// Props
-// TODO: Set coordinates of map
-// TODO: Set marker on map
-// TODO: Set polygon on map
-
-// Emit
-// TODO: Return coordinates of tap / click on map
-
-// API
-// TODO: Replace location with coordinates
+import { ref, onMounted } from 'vue'
 
 export default {
   setup() {
-    const mapElement = ref(null)
-
-    // @ts-ignore
-    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN as string
-
-    const coordinates = [-69.25657, 45.52524]
-
+    const mapContainer = ref()
     onMounted(() => {
+      //@ts-ignore
+      mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
       const map = new mapboxgl.Map({
-        container: mapElement.value, // container ID
+        container: mapContainer.value, // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        center: coordinates, // starting position [lng, lat]
+        center: [-69.25657, 45.52524], // starting position [lng, lat]
         zoom: 9, // starting zoom
         projection: 'globe', // display the map as a 3D globe
       })
+
       map.on('style.load', () => {
         map.setFog({}) // Set the default atmosphere style
       })
+
+      //get cooridinates when click
       map.on('click', (e) => {
-        console.log(`A click event has occurred at ${e.lngLat}`)
+        console.log(e.lngLat)
       })
-      //Added polygon
+
       map.on('load', () => {
         // Add a data source containing GeoJSON data.
         map.addSource('maine', {
@@ -51,6 +53,7 @@ export default {
             type: 'Feature',
             geometry: {
               type: 'Polygon',
+              // These coordinates outline Maine.
               coordinates: [
                 [
                   [-67.13734, 45.13745],
@@ -78,6 +81,7 @@ export default {
             },
           },
         })
+
         // Add a new layer to visualize the polygon.
         map.addLayer({
           id: 'maine',
@@ -89,17 +93,17 @@ export default {
             'fill-opacity': 0.5,
           },
         })
+
         new mapboxgl.Marker({
-          color: '#FFFFFF',
-          draggable: true,
+          color: '#ff0000',
+          draggeble: true,
         })
           .setLngLat([-69.25657, 45.52524])
           .addTo(map)
       })
     })
-    return {
-      mapElement,
-    }
+
+    return { mapContainer }
   },
 }
 </script>

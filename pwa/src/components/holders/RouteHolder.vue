@@ -21,7 +21,7 @@ export default {
       required: false,
     },
   },
-  setup(props: any) {
+  setup() {
     // TODO: rework for TS highlighting
     return {}
   },

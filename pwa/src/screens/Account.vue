@@ -1,6 +1,7 @@
 <template>
   <route-holder :title="`Hi, ${user?.displayName}`">
     <button @click="handleLogout">Log out</button>
+
   </route-holder>
 </template>
 
@@ -23,6 +24,13 @@ export default {
         return replace('/auth/login')
       })
     }
+
+    const getToken = async () => {
+      console.log(await user.value?.getIdToken())
+    }
+
+    getToken()
+
     return {
       user,
       handleLogout,
