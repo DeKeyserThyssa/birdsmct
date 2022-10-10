@@ -22,7 +22,6 @@ export default {
     },
   },
   setup() {
-    // TODO: rework for TS highlighting
     return {}
   },
 }

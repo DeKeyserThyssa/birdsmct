@@ -10,6 +10,9 @@
         <p class="my-2 h-6 w-12 rounded bg-neutral-100"></p>
       </div>
     </div>
+    <div v-else-if="error">
+      <p>Error happened.</p>
+    </div>
     <div
       class="grid gap-12 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5"
       v-else-if="result"
@@ -20,8 +23,8 @@
           :src="`./birds/${b.name}.webp`"
           :alt="`Drawing of a ${b.name}`"
         />
-        <h2 class="font-theme text-2xl font-bold">{{ b.name }}</h2>
-        <p class="text-sm">{{ b.category }}</p>
+        <h2 class="font-theme text-2xl font-light">{{ b.name }}</h2>
+        <p class="text-sm font-semibold tracking-wide text-neutral-500">{{ b.category }}</p>
       </RouterLink>
     </div>
   </route-holder>

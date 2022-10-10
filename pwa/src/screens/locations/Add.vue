@@ -25,7 +25,7 @@
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
             type="text"
             name="name"
-          />
+            />
         </label>
       </div>
 

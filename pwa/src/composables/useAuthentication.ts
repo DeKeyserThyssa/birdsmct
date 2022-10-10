@@ -4,8 +4,8 @@ import {
   User,
   updateProfile,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail
 } from '@firebase/auth'
-import { sendPasswordResetEmail } from 'firebase/auth'
 import { ref, Ref } from 'vue'
 import useFirebase from './useFirebase'
 
@@ -41,7 +41,7 @@ export default () => {
     })
   }
 
-  const login = async (
+  const login = (
     email: string,
     password: string,
   ): Promise<Ref<User | null>> => {
@@ -72,14 +72,14 @@ export default () => {
     })
   }
 
-  const restoreUser = (): Promise<Ref<User | null>> => {
+  const restoreUser = (): Promise<void> => {
     return new Promise((resolve, reject) => {
       auth.onAuthStateChanged((u: User | null) => {
         if (u) {
           setUser(u)
-          resolve(user)
+          resolve()
         } else {
-          resolve(ref(null))
+          resolve()
         }
       })
     })

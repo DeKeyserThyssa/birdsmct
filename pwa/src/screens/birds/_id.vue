@@ -6,16 +6,20 @@
     <div v-else-if="error">
       <p>Error happened</p>
     </div>
-    <div class="grid grid-cols-[1fr_2fr] gap-12" v-else-if="result">
-      <img
-        class="aspect-square w-full"
-        :src="`./${result.bird.name}.webp`"
-        :alt="`Drawing of a ${result.bird.name}`"
-      />
-      <!-- <h2 class="font-theme text-2xl font-bold">{{ result.bird.name }}</h2> -->
-      <div class="max-w-lg">
-        <p class="mb-3 text-sm">{{ result.bird.category }}</p>
-        <p class="text-lg leading-relaxed">{{ result.bird.description }}</p>
+    <div v-else-if="result">
+      <p class="mb-12 text-sm font-medium tracking-wider">
+        {{ result.bird.category }}
+      </p>
+      <div class="grid grid-cols-[1fr_2fr] items-center gap-12">
+        <img
+          class="aspect-square w-full"
+          :src="`/birds/${result.bird.name}.webp`"
+          :alt="`Drawing of a ${result.bird.name}`"
+        />
+
+        <div class="max-w-lg">
+          <p class="text-lg leading-relaxed">{{ result.bird.description }}</p>
+        </div>
       </div>
     </div>
   </route-holder>
@@ -50,24 +54,18 @@ export default {
       }
     `
 
-    const { result, loading, error } = useQuery(BIRD_BY_ID, {
+    const { result, loading, error } = useQuery<{ bird: Bird }>(BIRD_BY_ID, {
       id: params.id,
     })
 
-    // TODO: check rendering of async name property
-    // @ts-ignore
     const birdName: Ref<string> = ref(
       // @ts-ignore
       result && result.bird ? result.bird.name : '...',
     )
 
     watch(result, (result) => {
-      if (result.value) birdName.value = result.bird.name
+      if (result) birdName.value = result.bird.name
     })
-
-    const getBirdById = () => {}
-
-    params.id
 
     return {
       result,

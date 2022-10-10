@@ -1,7 +1,7 @@
 <template>
   <route-holder title="Observations">
     <template #header-actions>
-        <RouterLink to="/observations/add" class="bg-theme rounded-md bg-neutral-800 px-4 py-2 text-white" @click="createObservation">
+        <RouterLink to="/observations/add" class="bg-theme rounded-md bg-neutral-800 px-4 py-2 text-white">
             Create observation
         </RouterLink>
     </template>
