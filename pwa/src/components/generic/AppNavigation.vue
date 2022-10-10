@@ -1,6 +1,6 @@
 <template>
   <ul
-    class="grid w-full grid-cols-4 items-center text-center text-xs font-medium sm:w-auto sm:space-x-3 sm:text-left sm:text-sm"
+    class="grid w-full grid-cols-5 items-center text-center text-xs font-medium sm:w-auto sm:space-x-3 sm:text-left sm:text-sm"
   >
     <li>
       <router-link
@@ -32,6 +32,17 @@
       >
         <Clipboard class="mx-auto mb-2 h-5 sm:hidden" />
         Observations
+      </router-link>
+    </li>
+    
+    <li>
+      <router-link
+        active-class="opacity-40"
+        class="inline-block rounded-md px-3 py-6 outline-none focus-visible:ring-2"
+        to="/locations"
+      >
+        <MapPin class="mx-auto mb-2 h-5 sm:hidden" />
+        Locations
       </router-link>
     </li>
 
@@ -70,10 +81,10 @@
 </template>
 
 <script lang="ts">
-import { Home, Feather, User, Clipboard } from 'lucide-vue-next'
+import { Home, Feather, User, Clipboard, MapPin } from 'lucide-vue-next'
 import useAuthentication from '../../composables/useAuthentication'
 export default({
-  components: { Home, Feather, User, Clipboard },
+  components: { Home, Feather, User, Clipboard, MapPin },
   setup() {
     const { user } = useAuthentication()
     return {

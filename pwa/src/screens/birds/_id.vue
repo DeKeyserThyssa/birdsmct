@@ -55,10 +55,14 @@ export default {
     })
 
     // TODO: check rendering of async name property
-    const birdName: Ref<string> = ref(result.value?.bird.name || '')
+    // @ts-ignore
+    const birdName: Ref<string> = ref(
+      // @ts-ignore
+      result && result.bird ? result.bird.name : '...',
+    )
 
-    watch(result, () => {
-      if (result.value) birdName.value = result.value.bird.name
+    watch(result, (result) => {
+      if (result.value) birdName.value = result.bird.name
     })
 
     const getBirdById = () => {}

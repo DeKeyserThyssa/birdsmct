@@ -1,8 +1,13 @@
 <template>
-  <div class="px-6">
+  <div class="px-6 py-6">
     <main class="mx-auto max-w-6xl">
-      <h1 v-if="title" class="font-theme text-5xl font-bold">{{ title }}</h1>
+      <div class="flex items-center justify-between">
+        <h1 v-if="title" class="font-theme mb-6 text-5xl font-light">
+          {{ title }}
+        </h1>
 
+        <slot name="header-actions"></slot>
+      </div>
       <slot></slot>
     </main>
   </div>
@@ -12,14 +17,13 @@
 export default {
   props: {
     title: {
-      type: String,
+      type: String as () => string,
       required: false,
     },
   },
-  setup(props: any) { // TODO: rework for TS highlighting
-    return {
-      title: props.title,
-    }
+  setup(props: any) {
+    // TODO: rework for TS highlighting
+    return {}
   },
 }
 </script>

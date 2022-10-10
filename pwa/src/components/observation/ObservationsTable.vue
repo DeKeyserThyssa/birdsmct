@@ -1,6 +1,6 @@
 <template>
-  <table>
-    <tr>
+  <table class="w-full">
+    <tr class="text-left">
       <th>Image</th>
       <th>Bird</th>
       <th>Location</th>
@@ -8,28 +8,45 @@
       <th>User</th>
       <th>Spotted on</th>
     </tr>
-    <tbody v-if="observations.lenght > 0">
-      <tr v-for="o of observations" :key="o.id">
-        <td><img :src="`/birds/${o.bird.name}.webp`" class="h-4" /></td>
-        <td>{{ o.bird.name }}</td>
+    <tbody v-if="observations.length > 0">
+      <tr
+        v-for="(o, i) of observations"
+        :key="o.id"
+        :class="i % 2 === 0 ? '' : 'bg-white'"
+      >
+        <td>
+          <RouterLink :to="`birds/${o.bird.id}`">
+            <img :src="`/birds/${o.bird.name}.webp`" class="h-12" />
+          </RouterLink>
+        </td>
+        <td>
+          <RouterLink :to="`birds/${o.bird.id}`">
+            {{ o.bird.name }}
+          </RouterLink>
+        </td>
         <td>{{ o.area.name }}</td>
         <td>{{ o.name }}</td>
         <td>{{ o.userId }}</td>
-        <td>{{ o.createdAt }}</td>
+        <td>{{ new Date(o.createdAt).toLocaleDateString() }}</td>
       </tr>
     </tbody>
-    <tbody v-else>
+    <tbody class="grid place-items-center" v-else>
       <p>No observations yet</p>
     </tbody>
   </table>
 </template>
 
 <script lang="ts">
-import { defineProps } from 'vue'
 import Observation from '../../interfaces/interface.observation'
+
 export default {
-  setup() {
-    const props = defineProps<{ observations: Observation[] }>()
+  props: {
+    observations: {
+      type: Array as () => Observation[],
+      required: true,
+    },
+  },
+  setup(props) {
     return {
       observations: props.observations,
     }
