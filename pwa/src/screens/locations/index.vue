@@ -1,20 +1,21 @@
 <template>
   <route-holder title="Locations">
     <template #header-actions>
-      <RouterLink
+      <router-link
         to="/locations/add"
         class="bg-theme rounded-md bg-neutral-800 px-4 py-2 text-white"
       >
         Add location
-      </RouterLink>
+      </router-link>
     </template>
-    <MapView class="h-screen"/>
+    <map-view :map-coordinates="{ lng: 3.3224247, lat: 50.842592 }" @coordinateSelection="handleCoordinateSelection"/>
   </route-holder>
 </template>
 
 <script lang="ts">
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import MapView from '../../components/generic/MapView.vue'
+import { LngLatLike } from 'mapbox-gl'  
 
 export default {
   components: {
@@ -22,7 +23,12 @@ export default {
     MapView,
   },
   setup() {
-    return {}
+    const handleCoordinateSelection = (e: LngLatLike) => {
+      console.log(e)
+    }
+    return {
+      handleCoordinateSelection,
+    }
   },
 }
 </script>

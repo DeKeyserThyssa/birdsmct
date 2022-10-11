@@ -1,109 +1,120 @@
 <template>
-  <div ref="mapContainer"></div>
+  <div class="min-h-[50vh]" ref="mapElement"></div>
 </template>
 
 <script lang="ts">
-//https://docs.mapbox.com/mapbox-gl-js/guides/install/
-//https://leafletjs.com/
-//login maken
-//todo: set developer API in .env
+import 'mapbox-gl/dist/mapbox-gl.css'
 
-//props
-//todo: set coordinates of map
-//todo: set marker on map
-//todo: set polygon on map
-
-//emit (iets terugsturen naar bovenliggende parent)
-//todo: return coordinates of tap/click on map
-
-//api
-//todo: replace location with coordinates
-
-import mapboxgl from 'mapbox-gl'
-import { ref, onMounted } from 'vue'
+import mapboxgl, { LngLatLike, Map, MapMouseEvent, Marker } from 'mapbox-gl'
+import { ref, onMounted, Ref, watch } from 'vue'
+import { Polygon } from 'geojson'
 
 export default {
-  setup() {
-    const mapContainer = ref()
+  props: {
+    mapCoordinates: {
+      type: Object as () => LngLatLike,
+      required: true,
+    },
+
+    markers: {
+      type: Array as () => LngLatLike[],
+      required: false,
+      default: () => [],
+    },
+
+    polygons: {
+      type: Array as () => Polygon[],
+      required: false,
+    },
+  },
+  setup(props, { emit }) {
+    const mapElement: Ref<HTMLElement | undefined> = ref()
+    const selectedMarker: Ref<Marker | undefined> = ref()
+    //@ts-ignore
+    mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
+
+    const renderMarkerIfAny = (map: Map) => {
+      if (props.markers && props.markers.length < 1) return
+
+      for (const marker of props.markers!) {
+        new mapboxgl.Marker().setLngLat(marker).addTo(map)
+      }
+    }
+
+    const centerMapOnPolygons = (map: Map) => {
+      if (props.polygons && props.polygons.length < 1) return
+      let { lng, lat } = { lng: 0, lat: 0 }
+      let amount: number = 0
+      // TOOD: Location map?
+      props.polygons!.map(({ coordinates }) => {
+        coordinates.map((coordinate) => {
+          coordinate.map(([x, y]) => {
+            amount++
+            lng += x
+            lat += y
+          })
+        })
+      })
+      console.log(lng, lat, amount)
+      map.flyTo({
+        center: [lng / amount, lat / amount],
+        zoom: 16,
+        speed: 1
+      })
+    }
+
+    const renderPolygonsIfAny = (map: Map) => {
+      if (props.polygons && props.polygons.length < 1) return
+
+      for (const polygon in props.polygons!) {
+        map.addSource(`surface-${polygon}`, {
+          type: 'geojson',
+          data: props.polygons[polygon],
+        })
+        map.addLayer({
+          id: `surface-${polygon}`,
+          type: 'fill',
+          source: `surface-${polygon}`,
+          layout: {},
+          paint: {
+            'fill-color': '#088',
+            'fill-opacity': 0.6,
+          },
+        })
+      }
+      // centerMapOnPolygons(map)
+    }
+
+    // DOM content loaded
     onMounted(() => {
-      //@ts-ignore
-      mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
       const map = new mapboxgl.Map({
-        container: mapContainer.value, // container ID
+        container: mapElement.value!, // container ID
         style: 'mapbox://styles/mapbox/streets-v11', // style URL
-        center: [-69.25657, 45.52524], // starting position [lng, lat]
-        zoom: 9, // starting zoom
-        projection: 'globe', // display the map as a 3D globe
+        center: props.mapCoordinates, // starting position [lng, lat]
+        zoom: 15, // starting zoom
+        projection: { name: 'globe' }, // display the map as a 3D globe
       })
 
       map.on('style.load', () => {
         map.setFog({}) // Set the default atmosphere style
       })
 
-      //get cooridinates when click
-      map.on('click', (e) => {
-        console.log(e.lngLat)
+      renderMarkerIfAny(map)
+      renderPolygonsIfAny(map)
+
+      map.on('click', (e: MapMouseEvent) => {
+        if (selectedMarker.value) selectedMarker.value.remove()
+        selectedMarker.value = new Marker().setLngLat(e.lngLat).addTo(map)
+
+        emit('coordinateSelection', e.lngLat)
       })
-
-      map.on('load', () => {
-        // Add a data source containing GeoJSON data.
-        map.addSource('maine', {
-          type: 'geojson',
-          data: {
-            type: 'Feature',
-            geometry: {
-              type: 'Polygon',
-              // These coordinates outline Maine.
-              coordinates: [
-                [
-                  [-67.13734, 45.13745],
-                  [-66.96466, 44.8097],
-                  [-68.03252, 44.3252],
-                  [-69.06, 43.98],
-                  [-70.11617, 43.68405],
-                  [-70.64573, 43.09008],
-                  [-70.75102, 43.08003],
-                  [-70.79761, 43.21973],
-                  [-70.98176, 43.36789],
-                  [-70.94416, 43.46633],
-                  [-71.08482, 45.30524],
-                  [-70.66002, 45.46022],
-                  [-70.30495, 45.91479],
-                  [-70.00014, 46.69317],
-                  [-69.23708, 47.44777],
-                  [-68.90478, 47.18479],
-                  [-68.2343, 47.35462],
-                  [-67.79035, 47.06624],
-                  [-67.79141, 45.70258],
-                  [-67.13734, 45.13745],
-                ],
-              ],
-            },
-          },
-        })
-
-        // Add a new layer to visualize the polygon.
-        map.addLayer({
-          id: 'maine',
-          type: 'fill',
-          source: 'maine', // reference the data source
-          layout: {},
-          paint: {
-            'fill-color': '#0080ff', // blue color fill
-            'fill-opacity': 0.5,
-          },
-        })
-
-        new mapboxgl.Marker({
-          color: '#ff0000',
-          draggeble: true,
-        })
-          .setLngLat([-69.25657, 45.52524])
-          .addTo(map)
+      watch(props, () => {
+        renderMarkerIfAny(map)
+        renderPolygonsIfAny(map)
       })
     })
 
-    return { mapContainer }
+    return { mapElement }
   },
 }
 </script>

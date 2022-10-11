@@ -26,4 +26,22 @@ export class DatabaseSeedCommand {
     await this.seedService.deleteAllBirds()
     console.log('🌱 Deleting done 🏁')
   }
+
+  @Command({
+    command: 'seed:database:locations',
+    describe: 'seed the database with a couple of locations',
+  })
+  async seedLocations() {
+    const r = await this.seedService.addAllLocations()
+    console.log(`Added ${r.length} locations`, r)
+  }
+
+  @Command({
+    command: 'seed:database:observations',
+    describe: 'seed the database with a couple of observations',
+  })
+  async seedObservations() {
+    const r = await this.seedService.addAllObservations()
+    console.log(`Added ${r.length} locations`, r)
+  }
 }

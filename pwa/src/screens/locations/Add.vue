@@ -25,7 +25,24 @@
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
             type="text"
             name="name"
-            />
+          />
+        </label>
+      </div>
+      <div class="mt-3">
+        <label
+          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
+          for="areaId"
+        >
+          <span class="mb-2 block">Location</span>
+          <span class="sr-only"
+            >A map view to select the location of the observed bird.</span
+          >
+
+          <map-view
+            class="rounded-md"
+            :map-coordinates="{ lng: 3.3224247, lat: 50.842592 }"
+            @coordinateSelection="areaInput.area = $event"
+          />
         </label>
       </div>
 
@@ -41,6 +58,7 @@
     </form>
   </route-holder>
 </template>
+
 <script lang="ts">
 import { gql } from 'graphql-tag'
 import { useRouter } from 'vue-router'
@@ -48,6 +66,7 @@ import { reactive, Ref, ref } from 'vue'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { Loader2, X } from 'lucide-vue-next'
 
+import MapView from '../../components/generic/MapView.vue'
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import useAuthentication from '../../composables/useAuthentication'
 
@@ -56,12 +75,14 @@ export default {
     RouteHolder,
     X,
     Loader2,
+    MapView,
   },
   setup() {
     const { user } = useAuthentication()
     const { replace } = useRouter()
 
     const errorMessage: Ref<string> = ref('')
+    const loading: Ref<boolean> = ref(false)
 
     // TODO: make form
     // Link input values (v-model)
@@ -82,14 +103,12 @@ export default {
     `
 
     const areaInput = reactive({
-      name: 'Beautiful bird',
+      name: 'Uitkerkse Polder',
       area: null,
     })
 
     const ADD_AREA = gql`
-      mutation createArea(
-        $createAreaInput: CreateAreaInput!
-      ) {
+      mutation createArea($createAreaInput: CreateAreaInput!) {
         createArea(createAreaInput: $createAreaInput) {
           id
           name
@@ -97,7 +116,7 @@ export default {
       }
     `
 
-    const { result, loading, error } = useQuery(INSERT_DATA)
+    // const { result, loading, error } = useQuery(INSERT_DATA)
 
     const { mutate: addArea } = useMutation(ADD_AREA, () => ({
       // Callback function for reactive data & variable name without $...
@@ -106,18 +125,21 @@ export default {
       },
     }))
     const submitForm = async () => {
-      const area = await addArea().catch((err) => {
-        console.log({ err })
-        errorMessage.value = err.message
-      })
-      console.log(area)
+      loading.value = true
+      const location = await addArea()
+        .catch((err) => {
+          console.log({ err })
+          errorMessage.value = err.message
+        })
+        .finally(() => {
+          loading.value = false
+        })
+      console.log(location)
     }
 
     return {
       areaInput,
-      result,
       loading,
-      error,
       errorMessage,
       submitForm,
     }

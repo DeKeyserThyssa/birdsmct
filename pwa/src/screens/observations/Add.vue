@@ -61,19 +61,25 @@
           <select
             :disabled="loading"
             v-if="result"
-            v-model="observationInput.areaId"
+            v-model="observationInput.area"
             name="areaId"
             id="areaId"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            @change="setPolygon"
           >
             <option value="Pick a location" selected disabled>
               Pick a location
             </option>
-            <option v-for="a of result.areas" :key="a.id" :value="a.id">
+            <option v-for="a of result.areas" :key="a.id" :value="a">
               {{ a.name }}
             </option>
           </select>
         </label>
+        <map-view
+          class="min-h-[10vh]"
+          :mapCoordinates="{ lng: 3.3224247, lat: 50.842592 }"
+          :polygons="polygons"
+        />
       </div>
       <div class="mt-3">
         <label
@@ -122,24 +128,29 @@
 <script lang="ts">
 import { gql } from 'graphql-tag'
 import { useRouter } from 'vue-router'
-import { reactive, Ref, ref } from 'vue'
+import { reactive, Ref, ref, watch } from 'vue'
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { Loader2, X } from 'lucide-vue-next'
+import { Polygon } from 'geojson'
 
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import useAuthentication from '../../composables/useAuthentication'
+import MapView from '../../components/generic/MapView.vue'
+import Area from '../../interfaces/interface.location'
 
 export default {
   components: {
-    RouteHolder,
+  RouteHolder,
     X,
     Loader2,
+    MapView,
   },
   setup() {
     const { user } = useAuthentication()
     const { replace } = useRouter()
 
     const errorMessage: Ref<string> = ref('')
+    const polygons: Ref<Polygon[]> = ref([])
 
     // TODO: make form
     // Link input values (v-model)
@@ -155,6 +166,10 @@ export default {
         areas {
           id
           name
+          surface {
+            type
+            coordinates
+          }
         }
       }
     `
@@ -165,7 +180,9 @@ export default {
         'A beautiful common buzzard (buteo buteo) flying over Kortrijk.',
       weather: 'Overcast, clouded',
       birdId: 'Buizerd',
-      areaId: 'Magdalenapark',
+      area: {} as Partial<Area>,
+      areaId: '',
+      geolocation: { lng: 3.3224247, lat: 50.842592 },
       userId: user.value.uid,
       active: true,
     })
@@ -189,7 +206,26 @@ export default {
         createObservationInput: observationInput,
       },
     }))
+
+    const setPolygon = () => {
+      if (!observationInput.area) return
+      console.log(observationInput.area.surface)
+
+      // @ts-ignore
+      polygons.value = [observationInput.area.surface]
+    }
+
+    // watch(result, (newResult) => {
+    //   if (newResult) {
+    //     polygons.value = newResult.areas.map((a: Area) => a.surface)
+
+    //     // TODO:
+    //     // calculate center of all polygons combined
+    //   }
+    // })
+
     const submitForm = async () => {
+      observationInput.areaId = observationInput.area.id!
       const observation = await addObservation().catch((err) => {
         console.log({ err })
         errorMessage.value = err.message
@@ -203,6 +239,9 @@ export default {
       loading,
       error,
       errorMessage,
+      polygons,
+      
+      setPolygon,
       submitForm,
     }
   },

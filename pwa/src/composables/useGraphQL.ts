@@ -6,29 +6,30 @@ import {
 import { setContext } from '@apollo/client/link/context'
 import useAuthentication from './useAuthentication'
 
-const { user } = useAuthentication()
+export default () => {
+  const { user } = useAuthentication()
 
-const cache = new InMemoryCache()
-const httpLink = createHttpLink({
-  uri: 'http://[::1]:3003/graphql',
-  credentials: 'same-origin',
-})
+  const cache = new InMemoryCache()
+  const httpLink = createHttpLink({
+    uri: 'http://[::1]:3003/graphql',
+    credentials: 'same-origin',
+  })
 
-const authLink = setContext(async (_, { headers }) => {
-  const token = await user.value?.getIdToken()
-  return {
+  const authLink = setContext(async (_, { headers }) => ({
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      authorization: (await user.value?.getIdToken())
+        ? `Bearer ${await user.value?.getIdToken()}`
+        : '',
     },
+  }))
+
+  const apolloClient = new ApolloClient({
+    cache,
+    link: authLink.concat(httpLink),
+  })
+
+  return {
+    apolloClient,
   }
-})
-
-const apolloClient = new ApolloClient({
-  cache,
-  link: authLink.concat(httpLink),
-})
-
-export default () => {
-  return { apolloClient }
 }

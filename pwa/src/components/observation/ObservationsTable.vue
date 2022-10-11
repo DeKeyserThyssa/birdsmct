@@ -46,10 +46,8 @@ export default {
       required: true,
     },
   },
-  setup(props) {
-    return {
-      observations: props.observations,
-    }
+  setup() {
+    return {}
   },
 }
 </script>

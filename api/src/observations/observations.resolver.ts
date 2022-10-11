@@ -18,7 +18,7 @@ import { AreasService } from 'src/areas/areas.service'
 import { Bird } from 'src/birds/entities/bird.entity'
 import { UseGuards } from '@nestjs/common'
 import { FirebaseGuard } from 'src/auth/guards/firebase.guard'
-import { CurrentUser } from 'src/areas/decorators/user.decorator'
+import { CurrentUser } from 'src/auth/decorators/user.decorator'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
@@ -35,7 +35,6 @@ export class ObservationsResolver {
 
   @ResolveField()
   area(@Parent() o: Observation): Promise<Area> {
-    //@ts-ignore
     return this.areaService.findOne(o.areaId)
   }
 
@@ -49,7 +48,7 @@ export class ObservationsResolver {
 
   @UseGuards(FirebaseGuard)
   @Query(() => [Observation], { name: 'observations' })
-  findAll(@CurrentUser() user): Promise<Observation[]> {
+  findAll(@CurrentUser() user) {
     console.log(user)
     return this.observationsService.findAll()
   }
@@ -57,7 +56,7 @@ export class ObservationsResolver {
   @Query(() => Observation, { name: 'observation' })
   findOne(
     @Args('id', { type: () => String }) id: string,
-  ): Promise<Observation> {
+  ) {
     return this.observationsService.findOne(id)
   }
 
@@ -65,14 +64,14 @@ export class ObservationsResolver {
   updateObservation(
     @Args('updateObservationInput')
     updateObservationInput: UpdateObservationInput,
-  ): Promise<Observation> {
+  ) {
     return this.observationsService.update(
       updateObservationInput.id,
       updateObservationInput,
     )
   }
 
-  @Mutation(() => ClientMessage)
+  @Mutation(() => Observation)
   async removeObservation(
     @Args('id', { type: () => String }) id: string,
   ): Promise<ClientMessage> {

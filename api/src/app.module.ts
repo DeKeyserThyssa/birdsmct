@@ -14,8 +14,8 @@ import { AuthModule } from './auth/auth.module'
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot(typeORMConfig),
-    GraphQLModule.forRoot<ApolloDriverConfig>(graphqlConfig),
+    // TypeOrmModule.forRoot(typeORMConfig),
+    // GraphQLModule.forRoot<ApolloDriverConfig>(graphqlConfig),
     BootstrapModule,
     BirdsModule,
     AreasModule,
