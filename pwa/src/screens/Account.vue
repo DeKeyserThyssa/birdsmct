@@ -1,5 +1,6 @@
 <template>
   <route-holder :title="`Hi, ${user?.displayName}`">
+    {{customUser}}
     <button @click="handleLogout">Log out</button>
 
   </route-holder>
@@ -9,6 +10,7 @@
 import RouteHolder from '../components/holders/RouteHolder.vue'
 import useAuthentication from '../composables/useAuthentication'
 import { useRouter } from 'vue-router'
+import useCustomUser from '../composables/useCustomUser'
 
 export default {
   components: {
@@ -17,6 +19,7 @@ export default {
   
   setup() {
     const { user, logout } = useAuthentication()
+    const { customUser } = useCustomUser()
     const { replace } = useRouter()
 
     const handleLogout = () => {

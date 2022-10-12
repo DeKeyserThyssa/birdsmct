@@ -4,7 +4,7 @@
       <p>Loading</p>
     </div>
     <div v-else-if="error">
-      <p>Error happened</p>
+      <p>Error happened.</p>
     </div>
     <div v-else-if="result">
       <p class="mb-12 text-sm font-medium tracking-wider">
@@ -26,47 +26,29 @@
 </template>
 
 <script lang="ts">
+import { ref, Ref, watch } from 'vue-demi'
 import { useRoute } from 'vue-router'
-import { Ref } from 'vue-demi'
-import { ref, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
-
-import Bird from '../../interfaces/interface.bird'
 import RouteHolder from '../../components/holders/RouteHolder.vue'
-
+import Bird from '../../interfaces/interface.bird'
+import { BIRD_BY_ID } from '../../graphql/query.bird'
 export default {
   components: {
     RouteHolder,
   },
   setup() {
     const { params } = useRoute()
-
-    const BIRD_BY_ID = gql`
-      query bird($id: String!) {
-        bird(id: $id) {
-          id
-          name
-          url
-          description
-          category
-        }
-      }
-    `
-
     const { result, loading, error } = useQuery<{ bird: Bird }>(BIRD_BY_ID, {
       id: params.id,
     })
-
     const birdName: Ref<string> = ref(
+      // TODO: weird thing here...
       // @ts-ignore
       result && result.bird ? result.bird.name : '...',
     )
-
     watch(result, (result) => {
       if (result) birdName.value = result.bird.name
     })
-
     return {
       result,
       loading,

@@ -1,11 +1,12 @@
 <template>
-  <route-holder title="Add Observation">
+  <route-holder title="Add observation">
     <form class="mt-6 w-full max-w-3xl" @submit.prevent="submitForm">
       <div
         v-if="errorMessage"
         class="mb-3 flex items-center justify-between rounded-md bg-red-100 px-3 py-1"
       >
         <p class="text-sm text-red-600">{{ errorMessage }}</p>
+
         <button
           @click="errorMessage = ''"
           class="rounded-full p-3 ring-red-600 hover:bg-red-200 focus:outline-none focus:ring-2"
@@ -13,34 +14,67 @@
           <X class="h-4 w-4 text-red-600" />
         </button>
       </div>
-      <div class="mt-3">
+
+      <div>
         <label
-          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
+          class="mb-1 block text-neutral-400 focus-within:text-neutral-900"
+          :class="observationErrors.name ? 'focus-within:text-red-600' : ''"
           for="name"
         >
-          <span class="mb-2 block">Name</span>
+          <span
+            class="mb-2 block"
+            :class="observationErrors.name ? 'text-red-600' : ''"
+          >
+            Name
+            {{ observationErrors.name ? `(${observationErrors.name})` : '' }}
+          </span>
+
           <input
             v-model="observationInput.name"
-            id="name"
+            :class="
+              observationErrors.name
+                ? 'border-red-500 text-red-600 ring-red-400'
+                : ''
+            "
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            id="name"
             type="text"
             name="name"
           />
         </label>
       </div>
+
       <div class="mt-3">
         <label
-          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
+          :class="observationErrors.birdId ? 'text-red-600' : ''"
+          class="mb-1 block text-neutral-400 focus-within:text-neutral-900"
           for="birdId"
         >
-          <span class="mb-2 block">Bird specie</span>
+          <span
+            :class="
+              observationErrors.birdId
+                ? 'border-red-500 text-red-600 ring-red-400'
+                : ''
+            "
+            class="mb-2 block"
+            >Bird specie
+            {{
+              observationErrors.birdId ? `(${observationErrors.birdId})` : ''
+            }}
+          </span>
+
           <select
-            :disabled="loading"
             v-if="result"
+            :class="
+              observationErrors.birdId
+                ? 'border-red-500 text-red-600 ring-red-400'
+                : ''
+            "
+            class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            :disabled="loading"
             v-model="observationInput.birdId"
             name="birdId"
             id="birdId"
-            class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
           >
             <option value="Pick a bird species" selected disabled>
               Pick a bird species
@@ -52,67 +86,85 @@
         </label>
       </div>
 
+      <!-- LOCATION -->
       <div class="mt-3">
         <label
-          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
-          for="areaId"
+          :class="observationErrors.geoPoint ? 'text-red-600' : ''"
+          class="mt-3 block text-neutral-400 focus-within:text-neutral-900"
         >
-          <span class="mb-2 block">Location</span>
-          <select
-            :disabled="loading"
-            v-if="result"
-            v-model="observationInput.area"
-            name="areaId"
-            id="areaId"
-            class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
-            @change="setPolygon"
-          >
-            <option value="Pick a location" selected disabled>
-              Pick a location
-            </option>
-            <option v-for="a of result.areas" :key="a.id" :value="a">
-              {{ a.name }}
-            </option>
-          </select>
-        </label>
-        <map-view
-          class="min-h-[10vh]"
-          :mapCoordinates="{ lng: 3.3224247, lat: 50.842592 }"
-          :polygons="polygons"
-        />
-      </div>
-      <div class="mt-3">
-        <label
-          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
-          for="description"
-        >
-          <span class="mb-2 block">Description</span>
-          <textarea
-            v-model="observationInput.description"
-            class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
-            name="description"
-            id="description"
-            cols="30"
-          >
-          </textarea>
+          Observation location
+          {{
+            observationErrors.geoPoint ? `(${observationErrors.geoPoint})` : ''
+          }}
+
+          <div class="relative">
+            <map-view
+              :class="observationErrors.geoPoint ? 'ring ring-red-500' : ''"
+              class="min-h-[10vh] rounded-md"
+              :mapCoordinates="{ lng: 3.3232699, lat: 50.8425729 }"
+              :polygons="polygons"
+              @coordinateSelection="handleCoordinateSelection"
+            />
+
+            <select
+              v-if="result"
+              :class="
+                observationErrors.areaId
+                  ? 'border-red-500 text-red-600 ring ring-red-500'
+                  : ''
+              "
+              class="absolute top-0 right-0 mr-3 mt-3 rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+              v-model="area"
+              name="areaId"
+              id="areaId"
+              @change="handleAreaChange"
+              :disabled="loading"
+            >
+              <option :value="{}" selected disabled>Pick a location</option>
+              <option v-for="a of result.areas" :key="a.id" :value="a">
+                {{ a.name }}
+              </option>
+            </select>
+          </div>
         </label>
       </div>
 
+      <!-- DESCRIPTION -->
       <div class="mt-3">
         <label
-          class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
+          class="mb-1 block text-neutral-400 focus-within:text-neutral-900"
+          for="description"
+        >
+          <span class="mb-2 block">Description</span>
+
+          <textarea
+            class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
+            v-model="observationInput.description"
+            name="description"
+            id="description"
+            cols="30"
+          ></textarea>
+        </label>
+      </div>
+
+      <!-- WEATHER -->
+      <div>
+        <label
+          class="mb-1 block text-neutral-400 focus-within:text-neutral-900"
           for="weather"
         >
           <span class="mb-2 block">Weather</span>
+
           <input
             v-model="observationInput.weather"
+            id="weather"
             class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
             type="text"
             name="weather"
-            id="weather"
           />
         </label>
       </div>
+
       <button
         class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-300 hover:bg-neutral-900 focus-visible:ring"
         :disabled="loading"
@@ -125,123 +177,139 @@
     </form>
   </route-holder>
 </template>
+
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { reactive, ref, Ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { reactive, Ref, ref, watch } from 'vue'
-import { useMutation, useQuery } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import { Loader2, X } from 'lucide-vue-next'
 import { Polygon } from 'geojson'
+import { LngLat } from 'mapbox-gl'
 
 import RouteHolder from '../../components/holders/RouteHolder.vue'
-import useAuthentication from '../../composables/useAuthentication'
 import MapView from '../../components/generic/MapView.vue'
+import useAuthentication from '../../composables/useAuthentication'
 import Area from '../../interfaces/interface.location'
+
+import { ADD_OBSERVATION } from '../../graphql/mutation.observation'
+import { OBSERVATION_INSERT_DATA } from '../../graphql/query.observation'
 
 export default {
   components: {
-  RouteHolder,
-    X,
-    Loader2,
+    RouteHolder,
     MapView,
+    Loader2,
+    X,
   },
+
   setup() {
     const { user } = useAuthentication()
-    const { replace } = useRouter()
+    const { push } = useRouter()
 
     const errorMessage: Ref<string> = ref('')
     const polygons: Ref<Polygon[]> = ref([])
 
-    // TODO: make form
-    // Link input values (v-model)
-    // TODO: validation...
+    const area: Ref<Area> = ref({} as Area)
 
-    const INSERT_DATA = gql`
-      query insertData {
-        birds {
-          id
-          name
-        }
-
-        areas {
-          id
-          name
-          surface {
-            type
-            coordinates
-          }
-        }
-      }
-    `
+    const observationErrors = reactive({
+      name: '',
+      birdId: '',
+      areaId: '',
+      geoPoint: '',
+    })
 
     const observationInput = reactive({
-      name: 'Beautiful bird',
-      description:
-        'A beautiful common buzzard (buteo buteo) flying over Kortrijk.',
-      weather: 'Overcast, clouded',
-      birdId: 'Buizerd',
-      area: {} as Partial<Area>,
-      areaId: '',
-      geolocation: { lng: 3.3224247, lat: 50.842592 },
-      userId: user.value.uid,
+      name: '',
+      description: '',
+      weather: '',
+      birdId: 'Pick a bird species',
+      areaId: area.value?.id,
+      userId: user.value!.uid,
+      geoPoint: {
+        type: 'Point',
+        coordinates: [0, 0],
+      },
       active: true,
     })
 
-    const ADD_OBSERVATION = gql`
-      mutation createObservation(
-        $createObservationInput: CreateObservationInput!
-      ) {
-        createObservation(createObservationInput: $createObservationInput) {
-          id
-          name
-        }
-      }
-    `
-
-    const { result, loading, error } = useQuery(INSERT_DATA)
-
+    const { result, loading, error } = useQuery(OBSERVATION_INSERT_DATA)
     const { mutate: addObservation } = useMutation(ADD_OBSERVATION, () => ({
-      // Callback function for reactive data & variable name without $...
       variables: {
         createObservationInput: observationInput,
       },
     }))
 
-    const setPolygon = () => {
-      if (!observationInput.area) return
-      console.log(observationInput.area.surface)
+    const handleAreaChange = () => {
+      if (!area.value) return
 
-      // @ts-ignore
-      polygons.value = [observationInput.area.surface]
+      polygons.value = [area.value.surface]
+      observationInput.areaId = area.value.id
     }
 
-    // watch(result, (newResult) => {
-    //   if (newResult) {
-    //     polygons.value = newResult.areas.map((a: Area) => a.surface)
+    const handleCoordinateSelection = (event: LngLat) => {
+      observationInput.geoPoint.coordinates = [event.lat, event.lng]
+    }
 
-    //     // TODO:
-    //     // calculate center of all polygons combined
-    //   }
-    // })
+    const isFormInvalid = (): boolean => {
+      let hasSomeErrors = false
+
+      if (observationInput.name === '') {
+        observationErrors.name = 'Name is required'
+        hasSomeErrors = true
+      } else {
+        observationErrors.name = ''
+      }
+      if (observationInput.birdId === 'Pick a bird species') {
+        observationErrors.birdId = 'Please pick a bird'
+        hasSomeErrors = true
+      } else {
+        observationErrors.birdId = ''
+      }
+      if (!observationInput.areaId) {
+        observationErrors.areaId = 'Please select a location'
+        hasSomeErrors = true
+      } else {
+        observationErrors.areaId = ''
+      }
+      if (
+        observationInput.geoPoint.coordinates[0] === 0 &&
+        observationInput.geoPoint.coordinates[1] === 0
+      ) {
+        observationErrors.geoPoint = 'Please place a marker'
+        hasSomeErrors = true
+      } else {
+        observationErrors.geoPoint = ''
+      }
+
+      if (hasSomeErrors) return true
+      return false
+    }
 
     const submitForm = async () => {
-      observationInput.areaId = observationInput.area.id!
+      if (isFormInvalid()) return
+
       const observation = await addObservation().catch((err) => {
-        console.log({ err })
         errorMessage.value = err.message
       })
-      console.log(observation)
+
+      push('/observations')
     }
+
+    // Clean error when input changes
+    watch(observationInput, () => isFormInvalid())
 
     return {
       observationInput,
+      observationErrors,
       result,
       loading,
       error,
       errorMessage,
       polygons,
-      
-      setPolygon,
+      area,
+
+      handleAreaChange,
+      handleCoordinateSelection,
       submitForm,
     }
   },

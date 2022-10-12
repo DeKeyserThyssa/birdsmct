@@ -11,6 +11,7 @@ import { AreasModule } from './areas/areas.module'
 import { ObservationsModule } from './observations/observations.module'
 import { DatabaseSeedModule } from './seed/seed.module'
 import { AuthModule } from './auth/auth.module'
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthModule } from './auth/auth.module'
     ObservationsModule,
     DatabaseSeedModule,
     AuthModule,
+    UsersModule,
   ],
   // TODO: Enchancement? move to async provider
   controllers: [],

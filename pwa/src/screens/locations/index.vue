@@ -1,3 +1,4 @@
+
 <template>
   <route-holder title="Locations">
     <template #header-actions>
@@ -8,15 +9,18 @@
         Add location
       </router-link>
     </template>
-    <map-view :map-coordinates="{ lng: 3.3224247, lat: 50.842592 }" @coordinateSelection="handleCoordinateSelection"/>
+
+    <map-view
+      :map-coordinates="{ lng: 3.3232699, lat: 50.8425729 }"
+      @coordinateSelection="handleCoordinateSelection"
+    />
   </route-holder>
 </template>
 
 <script lang="ts">
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import MapView from '../../components/generic/MapView.vue'
-import { LngLatLike } from 'mapbox-gl'  
-
+import { LngLatLike } from 'mapbox-gl'
 export default {
   components: {
     RouteHolder,
