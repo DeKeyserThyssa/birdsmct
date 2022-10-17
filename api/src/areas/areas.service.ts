@@ -1,18 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
-import { CreateAreaInput } from './dto/create-area.input';
-import { UpdateAreaInput } from './dto/update-area.input';
-import { Area } from './entities/area.entity';
-import { ObjectId } from 'mongodb';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { DeleteResult, Repository } from 'typeorm'
+import { CreateAreaInput } from './dto/create-area.input'
+import { UpdateAreaInput } from './dto/update-area.input'
+import { Area } from './entities/area.entity'
+import { ObjectId } from 'mongodb'
+import { Point } from 'geojson'
 
 @Injectable()
 export class AreasService {
   constructor(
     @InjectRepository(Area)
-    private readonly areaRepository: Repository<Area>
+    private readonly areaRepository: Repository<Area>,
   ) {}
-
 
   create(createAreaInput: CreateAreaInput): Promise<Area> {
     const a = new Area()
@@ -20,15 +20,28 @@ export class AreasService {
     // a.observationsId = createAreaInput.observationsId
     // a.area = createAreaInput.area
     a.surface = createAreaInput.surface
-    return this.areaRepository.save(a);
+    return this.areaRepository.save(a)
   }
 
-  findAll(): Promise<Area[]>  {
-    return this.areaRepository.find();
+  findAll(): Promise<Area[]> {
+    return this.areaRepository.find()
   }
 
   findOne(id: string): Promise<Area> {
     return this.areaRepository.findOne(new ObjectId(id))
+  }
+
+  findAreaByPoint(p: Point): Promise<Area[]> {
+    return this.areaRepository.find({
+      where: {
+        surface: {
+          //@ts-ignore
+          $geoIntersects: {
+            $geometry: p,
+          },
+        },
+      },
+    })
   }
 
   update(updateAreaInput: UpdateAreaInput) {
@@ -42,6 +55,6 @@ export class AreasService {
   }
 
   remove(id: string): Promise<DeleteResult> {
-    return this.areaRepository.delete(new ObjectId(id));
+    return this.areaRepository.delete(new ObjectId(id))
   }
 }

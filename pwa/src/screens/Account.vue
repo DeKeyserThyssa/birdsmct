@@ -1,6 +1,6 @@
 <template>
   <route-holder :title="`Hi, ${user?.displayName}`">
-    {{customUser}}
+    <p>{{ customUser }}</p>
     <button @click="handleLogout">Log out</button>
 
   </route-holder>
