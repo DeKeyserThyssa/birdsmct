@@ -5,12 +5,18 @@ import { CreateObservationInput } from './dto/create-observation.input';
 import { UpdateObservationInput } from './dto/update-observation.input';
 import { Observation } from './entities/observation.entity';
 import { ObjectId } from 'mongodb';
+import { UsersService } from 'src/users/users.service';
+import { BirdsService } from 'src/birds/birds.service';
+import { AreasService } from 'src/areas/areas.service';
 
 @Injectable()
 export class ObservationsService {
   constructor(
     @InjectRepository(Observation)
-    private readonly observationRepository: Repository<Observation>
+    private readonly observationRepository: Repository<Observation>,
+    private readonly birdService: BirdsService,
+    private readonly areasService: AreasService,
+    private readonly userService: UsersService,
   ) {}
 
   create(createObservationInput: CreateObservationInput): Promise<Observation> {
@@ -24,6 +30,13 @@ export class ObservationsService {
     o.areaId = createObservationInput.areaId
     o.geolocation = createObservationInput.geoPoint
     o.active = createObservationInput.active
+
+    console.log('USER', o.userId)
+
+    this.birdService.incrementObservation(o.birdId)
+    this.areasService.incrementLocation(o.areaId, [o])
+    this.userService.incrementObservation(o.userId, [o])
+
     return this.observationRepository.save(o)
   }
 

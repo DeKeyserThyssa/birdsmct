@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common'
+
 import { ObservationsService } from './observations.service'
 import { ObservationsResolver } from './observations.resolver'
 import { TypeOrmModule } from '@nestjs/typeorm'

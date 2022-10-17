@@ -1,6 +1,6 @@
 <template>
   <router-view
-    class="min-h-screen bg-neutral-50 dark:bg-neutral-700"
+    class="@dark:bg-neutral-800 @dark:text-neutral-50 min-h-screen bg-neutral-50"
   ></router-view>
 </template>
 
@@ -18,7 +18,7 @@ export default {
     provide(DefaultApolloClient, apolloClient)
 
     if (user.value) loadCustomUser(user.value.uid)
-    
+
     return {}
   },
 }

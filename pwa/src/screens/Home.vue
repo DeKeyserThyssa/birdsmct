@@ -13,7 +13,7 @@
       <div v-if="result">
         <map-view
           :mapCoordinates="{ lng: 50.236, lat: 5.321523 }"
-          :polygons="areas"
+          :polygons="surfaces"
           class="-ml-6 min-h-[30vh] w-[calc(100vw)] lg:ml-[calc(calc(100vw-72rem)/-2)]"
         />
       </div>
@@ -25,11 +25,13 @@
 import { ref, Ref, watch } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 import { Polygon } from 'geojson'
+
 import RouteHolder from '../components/holders/RouteHolder.vue'
 import MapView from '../components/generic/MapView.vue'
 import Location from '../interfaces/interface.location'
 import { LOCATIONS } from '../graphql/query.location'
 import Area from '../interfaces/interface.location'
+
 export default {
   components: {
     RouteHolder,

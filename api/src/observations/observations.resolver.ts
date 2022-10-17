@@ -7,6 +7,8 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql'
+import { UseGuards } from '@nestjs/common'
+
 import { ObservationsService } from './observations.service'
 import { Observation } from './entities/observation.entity'
 import { CreateObservationInput } from './dto/create-observation.input'
@@ -16,7 +18,6 @@ import { ClientMessage, MessageTypes } from 'src/bootstrap/entities/ClientMessag
 import { Area } from 'src/areas/entities/area.entity'
 import { AreasService } from 'src/areas/areas.service'
 import { Bird } from 'src/birds/entities/bird.entity'
-import { UseGuards } from '@nestjs/common'
 import { FirebaseGuard } from 'src/auth/guards/firebase.guard'
 import { CurrentUser } from 'src/auth/decorators/user.decorator'
 import { NotificationsGateway } from 'src/notifications/notifications.gateway'
@@ -54,6 +55,7 @@ export class ObservationsResolver {
     return obs
   }
 
+  @UseGuards(FirebaseGuard)
   @UseGuards(FirebaseGuard)
   @Query(() => [Observation], { name: 'observations' })
   findAll(@CurrentUser() user) {

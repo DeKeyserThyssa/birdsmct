@@ -1,19 +1,31 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag'
 
 export const GET_USER_BY_UID = gql`
-    query findByUid($uid: String!) {
-        findByUid(uid: $uid) {
-            id
-            uid
-            observations {
-                id
-                name
-                description
-                createdAt
-                updatedAt
-            }
-            observationsCount
-            createdAt
-            updatedAt
-        } 
-    }`
+  query findByUid($uid: String!) {
+    findByUid(uid: $uid) {
+      id
+      uid
+      observations {
+        id
+        name
+        area {
+          id
+          name
+        }
+        bird {
+          id
+          name
+          fullname
+          category
+        }
+        userId
+        description
+        createdAt
+        updatedAt
+      }
+      observationsCount
+      createdAt
+      updatedAt
+    }
+  }
+`

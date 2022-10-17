@@ -6,6 +6,7 @@ import { UpdateAreaInput } from './dto/update-area.input'
 import { Area } from './entities/area.entity'
 import { ObjectId } from 'mongodb'
 import { Point } from 'geojson'
+import { Observation } from 'src/observations/entities/observation.entity'
 
 @Injectable()
 export class AreasService {
@@ -56,5 +57,15 @@ export class AreasService {
 
   remove(id: string): Promise<DeleteResult> {
     return this.areaRepository.delete(new ObjectId(id))
+  }
+
+  async incrementLocation(id: string, observations: Observation[]) {
+    const a: Area = await this.findOne(new ObjectId(id))
+
+    a.observations = a.observations
+      ? [...observations, ...a.observations] // merge the current observations with the new ones
+      : [...observations]
+
+    return this.areaRepository.save(a)
   }
 }

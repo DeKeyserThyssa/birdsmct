@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",
+    "@unocss/core": "^0.45.29",
     "@unocss/reset": "^0.45.21",
     "@vue/apollo-composable": "^4.0.0-alpha.19",
     "firebase": "^9.10.0",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@types/mapbox-gl": "^2.7.6",
+    "@unocss/preset-mini": "^0.45.29",
     "@vitejs/plugin-vue": "^3.1.0",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
