@@ -22,11 +22,11 @@ export class User {
 
   @Field(() => [Observation], { nullable: 'itemsAndList' }) //can return empty array []
   @Column({ nullable: true })
-  observations: Observation[]
+  observations?: Observation[]
 
   @Field(() => Int)
   @Column()
-  observationsCount: number
+  observationsCount?: number
 
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })

@@ -36,7 +36,7 @@ export class ObservationsService {
     return this.observationRepository.findOne(new ObjectId(id));
   }
 
-  update(id: string, updateObservationInput: UpdateObservationInput): Promise<Observation> {
+  update(updateObservationInput: UpdateObservationInput) {
     const update = new Observation()
     update.id = updateObservationInput.id
     update.name = updateObservationInput.name

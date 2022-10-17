@@ -66,7 +66,6 @@ export class ObservationsResolver {
     updateObservationInput: UpdateObservationInput,
   ) {
     return this.observationsService.update(
-      updateObservationInput.id,
       updateObservationInput,
     )
   }

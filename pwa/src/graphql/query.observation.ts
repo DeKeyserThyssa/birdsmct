@@ -9,7 +9,7 @@ export const OBSERVATIONS = gql`
         id
         name
       }
-      location {
+      area {
         id
         name
       }
@@ -26,10 +26,10 @@ export const OBSERVATION_INSERT_DATA = gql`
       name
     }
 
-    locations {
+    areas {
       id
       name
-      area {
+      surface {
         type
         coordinates
       }

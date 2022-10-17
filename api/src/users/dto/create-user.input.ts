@@ -8,11 +8,11 @@ export class CreateUserInput {
   uid: string
 
   @Field(() => [CreateObservationInput], {
-    nullable: 'itemsAndList',
+    nullable: 'itemsAndList', //can return empty array []
     defaultValue: [],
-  }) //can return empty array []
-  observations: Observation[]
+  }) 
+  observations?: Observation[]
 
   @Field(() => Int, { defaultValue: 0 })
-  observationsCount: number
+  observationsCount?: number
 }

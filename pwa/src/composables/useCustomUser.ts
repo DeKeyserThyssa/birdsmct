@@ -7,7 +7,7 @@ import useGraphQL from './useGraphQL'
 const user: Ref<User | null> = ref(null)
 
 export default () => {
-  const setCustomUser = (u: User) => user.value
+  const setCustomUser = (u: User) => (user.value = u)
   const { apolloClient } = useGraphQL()
 
   provideApolloClient(apolloClient)

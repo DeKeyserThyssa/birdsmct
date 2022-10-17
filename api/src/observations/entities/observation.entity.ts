@@ -25,7 +25,7 @@ export class Observation {
 
   @Field({nullable: true}) 
   @Column({nullable: true}) 
-  userId?: string
+  userId: string
 
   @Field({nullable: true}) 
   @Column({nullable: true}) 

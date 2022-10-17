@@ -4,10 +4,13 @@
 
 <script lang="ts">
 import 'mapbox-gl/dist/mapbox-gl.css'
+
 import { LngLatLike } from 'mapbox-gl'
 import { onMounted, Ref, ref, watch } from 'vue'
 import { Polygon } from 'geojson'
+
 import useMapbox from '../../composables/useMapbox'
+
 export default {
   props: {
     mapCoordinates: {
@@ -25,6 +28,7 @@ export default {
       default: () => [],
     },
   },
+
   setup(props, { emit }) {
     const {
       createMap,
@@ -33,16 +37,20 @@ export default {
       listenToInteraction,
       removeMapData,
     } = useMapbox(props)
+
     const mapElement: Ref<HTMLElement | null> = ref(null)
+
     // DOM Content Loaded
     onMounted(() => {
       const map = createMap(mapElement.value!)
+
       // This can help.
       map.on('load', () => {
         renderMarkerIfAny()
         renderPolygonsIfAny()
         listenToInteraction(emit, 'coordinateSelection')
       })
+
       // When props change, update the map data each time
       watch(props, async () => {
         await removeMapData()
@@ -50,6 +58,7 @@ export default {
         renderPolygonsIfAny()
       })
     })
+
     return {
       mapElement,
     }

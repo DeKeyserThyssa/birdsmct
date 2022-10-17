@@ -28,7 +28,7 @@ export class BirdsService {
     return this.birdsRepository.find();
   }
 
-  findOne(id: string) {
+  findOne(id: string): Promise<Bird> {
     return this.birdsRepository.findOne(new ObjectId(id))
   }
 

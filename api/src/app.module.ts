@@ -18,15 +18,17 @@ import { UsersModule } from './users/users.module';
     // TypeOrmModule.forRoot(typeORMConfig),
     // GraphQLModule.forRoot<ApolloDriverConfig>(graphqlConfig),
     BootstrapModule,
+    AuthModule,
+    
     BirdsModule,
     AreasModule,
     ObservationsModule,
-    DatabaseSeedModule,
-    AuthModule,
     UsersModule,
+    
+    DatabaseSeedModule,
   ],
   // TODO: Enchancement? move to async provider
-  controllers: [],
+  exports: [],
   providers: [],
 })
 export class AppModule {}
