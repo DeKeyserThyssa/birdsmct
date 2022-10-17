@@ -2,7 +2,7 @@ import Bird from "./interface.bird"
 import Area from "./interface.location"
 
 export default interface Observation {
-  id: string
+  id?: string
   name: string
   userId?: string
   weather?: string

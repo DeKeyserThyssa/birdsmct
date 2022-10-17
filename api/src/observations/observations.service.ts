@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateObservationInput } from './dto/create-observation.input';
 import { UpdateObservationInput } from './dto/update-observation.input';
 import { Observation } from './entities/observation.entity';
@@ -20,10 +20,9 @@ export class ObservationsService {
     o.description = createObservationInput.description
     o.weather = createObservationInput.weather
     o.userId = createObservationInput.userId
-    // o.birds = createObservationInput.bird
     o.birdId = createObservationInput.birdId
-    // o.area = createObservationInput.area
     o.areaId = createObservationInput.areaId
+    o.geolocation = createObservationInput.geoPoint
     o.active = createObservationInput.active
     return this.observationRepository.save(o)
   }
@@ -37,21 +36,20 @@ export class ObservationsService {
     return this.observationRepository.findOne(new ObjectId(id));
   }
 
-  update(id: string, updateObservationInput: UpdateObservationInput): Promise<Observation> {
+  update(updateObservationInput: UpdateObservationInput) {
     const update = new Observation()
     update.id = updateObservationInput.id
     update.name = updateObservationInput.name
     update.description = updateObservationInput.description
     update.weather = updateObservationInput.weather
-    // update.birds = updateObservationInput.bird
     update.birdId = updateObservationInput.birdId
-    // update.location = updateObservationInput.location
     update.areaId = updateObservationInput.areaId
+    update.geolocation = updateObservationInput.geoPoint
     update.active = updateObservationInput.active
     return this.observationRepository.save(update)
   }
 
-  remove(id: string): Promise<DeleteResult> {
+  remove(id: string) {
     return this.observationRepository.delete(new ObjectId(id));
   }
 }

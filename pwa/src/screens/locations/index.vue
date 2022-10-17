@@ -1,29 +1,38 @@
+
 <template>
   <route-holder title="Locations">
     <template #header-actions>
-      <RouterLink
-        to="/observations/add"
+      <router-link
+        to="/locations/add"
         class="bg-theme rounded-md bg-neutral-800 px-4 py-2 text-white"
-        @click="createObservation"
       >
         Add location
-      </RouterLink>
+      </router-link>
     </template>
-    <MapView />
+
+    <map-view
+      :map-coordinates="{ lng: 3.3232699, lat: 50.8425729 }"
+      @coordinateSelection="handleCoordinateSelection"
+    />
   </route-holder>
 </template>
 
 <script lang="ts">
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import MapView from '../../components/generic/MapView.vue'
-
+import { LngLatLike } from 'mapbox-gl'
 export default {
   components: {
     RouteHolder,
     MapView,
   },
   setup() {
-    return {}
+    const handleCoordinateSelection = (e: LngLatLike) => {
+      console.log(e)
+    }
+    return {
+      handleCoordinateSelection,
+    }
   },
 }
 </script>

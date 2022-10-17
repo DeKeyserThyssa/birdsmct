@@ -1,4 +1,6 @@
 import { InputType, Int, Field } from '@nestjs/graphql'
+import { Point } from 'geojson'
+import { GeoPoint } from 'src/areas/entities/geopoint.entity'
 
 @InputType()
 export class CreateObservationInput {
@@ -14,7 +16,10 @@ export class CreateObservationInput {
   @Field()
   areaId: string
 
-  @Field() // GraphQL
+  @Field(() => GeoPoint, {nullable: true})
+  geoPoint?: Point
+
+  @Field({ nullable: true }) // GraphQL
   weather?: string
 
   @Field({ nullable: true })

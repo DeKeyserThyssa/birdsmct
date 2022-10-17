@@ -67,8 +67,6 @@ describe('BirdsResolver', () => {
     })
 
     describe('When findAll is called', () => {
-      // it.todo('should call birdService.findAll()', async () => {
-      // });
 
       it('should call birdService.findAll()', () => {
         expect(service.findAll).toBeCalledTimes(1)

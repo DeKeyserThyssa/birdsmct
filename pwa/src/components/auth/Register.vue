@@ -122,7 +122,6 @@ export default defineComponent({
       }
       register(userInput.name, userInput.email, userInput.password)
         .then((u) => {
-          console.log('User created: ', u)
           return replace('/')
         })
         .catch((error) => {

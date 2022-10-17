@@ -18,7 +18,8 @@ export class AreasService {
     const a = new Area()
     a.name = createAreaInput.name
     // a.observationsId = createAreaInput.observationsId
-    a.area = createAreaInput.area
+    // a.area = createAreaInput.area
+    a.surface = createAreaInput.surface
     return this.areaRepository.save(a);
   }
 
@@ -35,7 +36,8 @@ export class AreasService {
     update.id = new ObjectId(updateAreaInput.id)
     update.name = updateAreaInput.name
     // update.observationsId = updateLocationInput.observationsId
-    update.area = updateAreaInput.area
+    // update.area = updateAreaInput.area
+    update.surface = updateAreaInput.surface
     return this.areaRepository.save(update) // save gives us an advantage
   }
 
