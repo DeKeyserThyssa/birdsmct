@@ -28,11 +28,11 @@ export class BirdsService {
     return this.birdsRepository.find();
   }
 
-  findOne(id: string) {
+  findOne(id: string): Promise<Bird> {
     return this.birdsRepository.findOne(new ObjectId(id))
   }
 
-  update(id: string, updateBirdInput: UpdateBirdInput): Promise<Bird> {
+  update(updateBirdInput: UpdateBirdInput) {
     const update = new Bird()
     update.id = new ObjectId(updateBirdInput.id)
     update.name = updateBirdInput.name

@@ -4,15 +4,19 @@ import { BirdsService } from './birds.service'
 import { Bird } from './entities/bird.entity'
 import { CreateBirdInput } from './dto/create-bird.input'
 import { UpdateBirdInput } from './dto/update-bird.input'
-import { DeleteResult } from 'typeorm'
-import { ClientMessage, MessageTypes } from 'src/entities/ClientMessage'
+import {
+  ClientMessage,
+  MessageTypes,
+} from '../bootstrap/entities/ClientMessage'
 
 @Resolver(() => Bird)
 export class BirdsResolver {
   constructor(private readonly birdsService: BirdsService) {}
 
   @Mutation(() => Bird, { description: 'Create a bird using the DTO.' })
-  createBird(@Args('createBirdInput') createBirdInput: CreateBirdInput) {
+  createBird(
+    @Args('createBirdInput') createBirdInput: CreateBirdInput,
+  ): Promise<Bird> {
     return this.birdsService.create(createBirdInput)
   }
 
@@ -30,7 +34,7 @@ export class BirdsResolver {
   updateBird(
     @Args('updateBirdInput') updateBirdInput: UpdateBirdInput,
   ): Promise<Bird> {
-    return this.birdsService.update(updateBirdInput.id, updateBirdInput)
+    return this.birdsService.update(updateBirdInput)
   }
 
   // Todo: make better
@@ -40,7 +44,11 @@ export class BirdsResolver {
   ): Promise<ClientMessage> {
     const deleted = await this.birdsService.remove(id)
     if (deleted.affected <= 1)
-      return { type: MessageTypes.succes, message: 'Bird deleted', statusCode: 200 }
+      return {
+        type: MessageTypes.succes,
+        message: 'Bird deleted',
+        statusCode: 200,
+      }
 
     return {
       type: MessageTypes.error,

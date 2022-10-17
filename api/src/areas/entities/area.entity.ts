@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Polygon } from 'geojson'
 import { ObjectId } from 'mongodb'
-import { Bird } from 'src/birds/entities/bird.entity'
-import { Observation } from 'src/observations/entities/observation.entity'
 import {
   Column,
   CreateDateColumn,
@@ -10,30 +9,30 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
+import { Observation } from 'src/observations/entities/observation.entity'
+import { Surface } from './surface.area'
 @Entity()
 @ObjectType({ description: 'area' })
 export class Area {
   @Field(() => ID) // GraphQL
   @ObjectIdColumn() //typeORM // Map this field to the (generated) _id column in the database
-  id: string
+  id: ObjectId
 
   @Field() // GraphQL
   @Column() //typeORM
   name: string
 
-  @Field(() => Bird)
-  bird: Bird
+  // @Field()
+  // @Column()
+  // observationsId: string
 
-  @Column()
-  birdId: string
-
-  @Field(() => [Observation])
-  @Column({nullable: true})
+  @Field(() => [Observation], { nullable: 'itemsAndList' })
+  @Column({ nullable: true })
   observations: Observation[]
 
-  @Field() // GraphQL
-  @Column() //typeORM
-  area: string
+  @Field(() => Surface)
+  @Column({ nullable: true, type: 'simple-json' })
+  surface: Polygon // area is beter, maar wordt al gebruikt
 
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })

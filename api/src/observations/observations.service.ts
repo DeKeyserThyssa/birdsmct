@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DeleteResult, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateObservationInput } from './dto/create-observation.input';
 import { UpdateObservationInput } from './dto/update-observation.input';
 import { Observation } from './entities/observation.entity';
@@ -14,13 +14,19 @@ export class ObservationsService {
   ) {}
 
   create(createObservationInput: CreateObservationInput): Promise<Observation> {
+    // return 'This action adds a new observation'
     const o = new Observation()
     o.name = createObservationInput.name
-    o.userId = createObservationInput.userId
+    o.description = createObservationInput.description
     o.weather = createObservationInput.weather
+    o.userId = createObservationInput.userId
     o.birdId = createObservationInput.birdId
-    return this.observationRepository.save(o);
+    o.areaId = createObservationInput.areaId
+    o.geolocation = createObservationInput.geoPoint
+    o.active = createObservationInput.active
+    return this.observationRepository.save(o)
   }
+
 
   findAll(): Promise<Observation[]>  {
     return this.observationRepository.find();
@@ -30,16 +36,20 @@ export class ObservationsService {
     return this.observationRepository.findOne(new ObjectId(id));
   }
 
-  update(id: string, updateObservationInput: UpdateObservationInput): Promise<Observation> {
+  update(updateObservationInput: UpdateObservationInput) {
     const update = new Observation()
-    update.id = new ObjectId(updateObservationInput.id)
+    update.id = updateObservationInput.id
     update.name = updateObservationInput.name
-    update.userId = updateObservationInput.userId
+    update.description = updateObservationInput.description
     update.weather = updateObservationInput.weather
+    update.birdId = updateObservationInput.birdId
+    update.areaId = updateObservationInput.areaId
+    update.geolocation = updateObservationInput.geoPoint
+    update.active = updateObservationInput.active
     return this.observationRepository.save(update)
   }
 
-  remove(id: string): Promise<DeleteResult> {
+  remove(id: string) {
     return this.observationRepository.delete(new ObjectId(id));
   }
 }

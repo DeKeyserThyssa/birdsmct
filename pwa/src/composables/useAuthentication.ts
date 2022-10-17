@@ -4,14 +4,19 @@ import {
   User,
   updateProfile,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from '@firebase/auth'
-import { sendPasswordResetEmail } from 'firebase/auth'
 import { ref, Ref } from 'vue'
 import useFirebase from './useFirebase'
+
+import { User as CustomUser } from '@firebase/auth'
+import { useLazyQuery } from '@vue/apollo-composable'
+import { GET_USER_BY_UID } from '../graphql/query.user'
 
 const user: Ref<User | null> = ref(null)
 
 export default () => {
+
   const { auth } = useFirebase()
 
   const setUser = (u: User | null) => (user.value = u)
@@ -41,7 +46,7 @@ export default () => {
     })
   }
 
-  const login = async (
+  const login = (
     email: string,
     password: string,
   ): Promise<Ref<User | null>> => {
@@ -72,19 +77,18 @@ export default () => {
     })
   }
 
-  const restoreUser = (): Promise<Ref<User | null>> => {
+  const restoreUser = (): Promise<void> => {
     return new Promise((resolve, reject) => {
       auth.onAuthStateChanged((u: User | null) => {
         if (u) {
           setUser(u)
-          resolve(user)
+          resolve()
         } else {
-          resolve(ref(null))
+          resolve()
         }
       })
     })
   }
-
 
   // TODO: forgot password
   const forgotPassword = (email: string): Promise<void> => {
@@ -94,7 +98,6 @@ export default () => {
         .catch((error) => reject(error))
     })
   }
-
 
   return {
     user,

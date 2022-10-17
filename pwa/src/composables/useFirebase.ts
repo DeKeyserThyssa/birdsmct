@@ -17,6 +17,7 @@ export default () => {
   }
 
   const app: FirebaseApp = initializeApp(firebaseConfig)
+  
   const auth: Auth = getAuth()
   setPersistence(auth, browserLocalPersistence)
 

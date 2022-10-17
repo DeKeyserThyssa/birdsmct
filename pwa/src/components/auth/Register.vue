@@ -16,7 +16,7 @@
         <X class="h-4 w-4 text-red-600" />
       </button>
     </div>
-    <div class="mt-3">
+    <div>
       <label
         class="mb-1 block text-neutral-500 focus-within:text-neutral-900"
         for="name"
@@ -28,6 +28,7 @@
           class="w-full rounded-md border border-neutral-200 px-3 py-1 text-neutral-800 outline-none ring-neutral-300 focus-visible:ring"
           type="text"
           name="name"
+          autocomplete="name"
         />
       </label>
     </div>
@@ -121,7 +122,6 @@ export default defineComponent({
       }
       register(userInput.name, userInput.email, userInput.password)
         .then((u) => {
-          console.log('User created: ', u)
           return replace('/')
         })
         .catch((error) => {

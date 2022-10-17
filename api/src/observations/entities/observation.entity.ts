@@ -1,6 +1,8 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql'
+import { Point } from 'geojson'
 import { ObjectId } from 'mongodb'
 import { Area } from 'src/areas/entities/area.entity'
+import { GeoPoint } from 'src/areas/entities/geopoint.entity'
 import { Bird } from 'src/birds/entities/bird.entity'
 import {
   Column,
@@ -10,23 +12,24 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-@ObjectType()
+@Entity()
+@ObjectType({ description: 'observations' })
 export class Observation {
   @Field(() => ID) // GraphQL
   @ObjectIdColumn() //typeORM // Map this field to the (generated) _id column in the database
-  id: string
+  id: ObjectId
 
   @Field() // GraphQL
   @Column() //typeORM
   name: string
 
-  @Field() 
-  @Column() 
+  @Field({nullable: true}) 
+  @Column({nullable: true}) 
   userId: string
 
   @Field({nullable: true}) 
   @Column({nullable: true}) 
-  weather: string
+  weather?: string
 
   @Field(() => Bird)
   bird: Bird
@@ -40,10 +43,18 @@ export class Observation {
   @Column()
   areaId: string
 
-  @Field({nullable: true})
+  @Field(() => GeoPoint)
+  @Column({ nullable: true, type: 'simple-json' })
+  geolocation: Point
+
+  @Field({ nullable: true })
+  @Column()
+  description?: string
+
+  @Field({ nullable: true })
   @Column()
   active?: boolean
-
+  
   @Field({ nullable: true })
   @CreateDateColumn({ type: 'timestamp', nullable: true })
   createdAt?: Date

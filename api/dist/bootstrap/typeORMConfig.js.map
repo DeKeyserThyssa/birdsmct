@@ -1,1 +1,0 @@
-{"version":3,"file":"typeORMConfig.js","sourceRoot":"","sources":["../../src/bootstrap/typeORMConfig.ts"],"names":[],"mappings":";;;AAEa,QAAA,aAAa,GAAyB;IAC/C,IAAI,EAAE,SAAS;IACf,GAAG,EAAE,+BAA+B;IACpC,QAAQ,EAAE,CAAC,SAAS,GAAG,yBAAyB,CAAC;IACjD,WAAW,EAAE,IAAI;IACjB,eAAe,EAAE,IAAI;IACrB,kBAAkB,EAAE,IAAI;CACvB,CAAA"}
