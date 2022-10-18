@@ -4,7 +4,7 @@
     <template #header-actions>
       <router-link
         to="/locations/add"
-        class="bg-theme rounded-md bg-neutral-800 px-4 py-2 text-white"
+        class="@dark:bg-neutral-50 @dark:text-neutral-800 bg-theme rounded-md bg-neutral-800 px-4 py-2 text-white"
       >
         Add location
       </router-link>
@@ -18,9 +18,11 @@
 </template>
 
 <script lang="ts">
+import { LngLatLike } from 'mapbox-gl'
+
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import MapView from '../../components/generic/MapView.vue'
-import { LngLatLike } from 'mapbox-gl'
+
 export default {
   components: {
     RouteHolder,
@@ -28,7 +30,7 @@ export default {
   },
   setup() {
     const handleCoordinateSelection = (e: LngLatLike) => {
-      console.log(e)
+        console.log(e)
     }
     return {
       handleCoordinateSelection,

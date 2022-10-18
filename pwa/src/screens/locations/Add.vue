@@ -51,7 +51,7 @@
       </div>
 
       <button
-        class="mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-300 hover:bg-neutral-900 focus-visible:ring"
+        class="@dark:bg-neutral-50 @dark:text-neutral-800 mt-6 flex w-full items-center justify-center rounded-md bg-neutral-700 py-2 px-3 text-white outline-none ring-neutral-300 hover:bg-neutral-900 focus-visible:ring"
         :disabled="loading"
       >
         <span v-if="!loading">Add location</span>
@@ -68,10 +68,12 @@ import { reactive, ref, Ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useMutation } from '@vue/apollo-composable'
 import { Loader2, X } from 'lucide-vue-next'
+
 import RouteHolder from '../../components/holders/RouteHolder.vue'
 import useAuthentication from '../../composables/useAuthentication'
 import MapView from '../../components/generic/MapView.vue'
 import { ADD_LOCATION } from '../../graphql/mutation.location'
+
 export default {
   components: {
     RouteHolder,
@@ -95,7 +97,7 @@ export default {
     const { mutate: addArea } = useMutation(ADD_LOCATION, () => ({
       // Callback function for reactive data & variable name without $...
       variables: {
-        createareaInput: areaInput,
+        createAreaInput: areaInput,
       },
     }))
     const submitForm = async () => {

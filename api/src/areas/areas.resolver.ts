@@ -17,6 +17,8 @@ import {
   MessageTypes,
 } from '../bootstrap/entities/ClientMessage'
 import { ObservationsService } from '../observations/observations.service'
+import { GeoPoint } from './entities/geopoint.entity'
+import { Point } from 'geojson'
 
 @Resolver(() => Area)
 export class AreasResolver {
@@ -44,6 +46,13 @@ export class AreasResolver {
   @Query(() => Area, { name: 'area' })
   findOne(@Args('id', { type: () => String }) id: string): Promise<Area> {
     return this.areasService.findOne(id)
+  }
+
+  @Query(() => [Area], { name: 'findSurfaceByPoint' })
+  findSurfaceByPoint(
+    @Args('point', { type: () => GeoPoint }) p: Point,
+  ): Promise<Area[]> {
+    return this.areasService.findAreaByPoint(p)
   }
 
   @Mutation(() => Area)

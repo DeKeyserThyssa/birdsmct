@@ -7,6 +7,8 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql'
+import { UseGuards } from '@nestjs/common'
+
 import { ObservationsService } from './observations.service'
 import { Observation } from './entities/observation.entity'
 import { CreateObservationInput } from './dto/create-observation.input'
@@ -16,9 +18,9 @@ import { ClientMessage, MessageTypes } from 'src/bootstrap/entities/ClientMessag
 import { Area } from 'src/areas/entities/area.entity'
 import { AreasService } from 'src/areas/areas.service'
 import { Bird } from 'src/birds/entities/bird.entity'
-import { UseGuards } from '@nestjs/common'
 import { FirebaseGuard } from 'src/auth/guards/firebase.guard'
 import { CurrentUser } from 'src/auth/decorators/user.decorator'
+import { NotificationsGateway } from 'src/notifications/notifications.gateway'
 
 @Resolver(() => Observation)
 export class ObservationsResolver {
@@ -26,6 +28,7 @@ export class ObservationsResolver {
     private readonly observationsService: ObservationsService,
     private readonly birdService: BirdsService,
     private readonly areaService: AreasService,
+    private readonly notificationsGateway: NotificationsGateway
   ) {}
 
   @ResolveField()
@@ -39,13 +42,20 @@ export class ObservationsResolver {
   }
 
   @Mutation(() => Observation)
-  createObservation(
+  async createObservation(
     @Args('createObservationInput')
     createObservationInput: CreateObservationInput,
   ) {
-    return this.observationsService.create(createObservationInput)
+    const obs = await this.observationsService.create(createObservationInput)
+    const areas = await this.areaService.findAreaByPoint(obs.geolocation)
+    if (areas.length > 0) {
+      // verwittig iedereen in deze room
+      this.notificationsGateway.server.to(areas[0].name).emit('bird:observation', obs)
+    }
+    return obs
   }
 
+  @UseGuards(FirebaseGuard)
   @UseGuards(FirebaseGuard)
   @Query(() => [Observation], { name: 'observations' })
   findAll(@CurrentUser() user) {

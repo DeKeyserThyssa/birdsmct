@@ -27,7 +27,7 @@ export class UsersResolver {
   @Query(() => User)
   findByUid(@Args('uid', { type: () => String }) uid: string) {
     return this.usersService.findOneBy(uid)
-  }
+  }papp
 
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {

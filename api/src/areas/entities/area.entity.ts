@@ -22,10 +22,6 @@ export class Area {
   @Column() //typeORM
   name: string
 
-  // @Field()
-  // @Column()
-  // observationsId: string
-
   @Field(() => [Observation], { nullable: 'itemsAndList' })
   @Column({ nullable: true })
   observations: Observation[]

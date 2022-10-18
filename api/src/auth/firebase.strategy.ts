@@ -40,11 +40,14 @@ export class FirebaseAuthStrategy extends PassportStrategy(
   }
 
   private async authorize(jwtToken: string): Promise<DecodedIdToken> {
+    console.log('Using', jwtToken)
     try {
       return await this.firebase
         .getAuth()
         .verifyIdToken(jwtToken, this.checkRevoked)
     } catch (err: unknown) {
+      console.log(err)
+      
       const e = err as FirebaseError
       if (e.code === 'auth/id-token-expired') {
         this.logger.warn('auth/id-token-expired')

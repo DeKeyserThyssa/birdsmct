@@ -2,3 +2,7 @@
 pwa/.env
 **/dist/
 api/birds-781b0-firebase-adminsdk.json
+
+**/.env
+
+api/src/bootstrap/envs/

@@ -47,4 +47,10 @@ export class BirdsService {
   remove(id: string): Promise<DeleteResult> {
     return this.birdsRepository.delete(new ObjectId(id));
   }
+
+  async incrementObservation(id: string, amount = 1): Promise<void> {
+    const b: Bird = await this.findOne(new ObjectId(id))
+    b.observations = b.observations + amount
+    await this.birdsRepository.save(b)
+  }
 }
