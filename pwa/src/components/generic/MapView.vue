@@ -6,12 +6,12 @@
 import 'mapbox-gl/dist/mapbox-gl.css'
 
 import { LngLatLike } from 'mapbox-gl'
-import { onMounted, Ref, ref, watch } from 'vue'
+import { defineComponent, onMounted, Ref, ref, watch } from 'vue'
 import { Polygon } from 'geojson'
 
 import useMapbox from '../../composables/useMapbox'
 
-export default {
+export default defineComponent({
   props: {
     mapCoordinates: {
       type: Object as () => LngLatLike,
@@ -63,5 +63,5 @@ export default {
       mapElement,
     }
   },
-}
+})
 </script>
