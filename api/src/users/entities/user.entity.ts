@@ -23,7 +23,7 @@ export class User {
 
   @Field(() => Role, { nullable: true })
   @Column( { default: { name: 'user' } } )
-  role: Role
+  role?: Role
 
   @Field(() => [Observation], { nullable: 'itemsAndList' }) //can return empty array []
   @Column({ nullable: true })
