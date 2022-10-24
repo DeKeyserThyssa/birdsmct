@@ -8,6 +8,7 @@ import {
 } from 'typeorm'
 import { ObjectId } from 'mongodb'
 import { Observation } from 'src/observations/entities/observation.entity'
+import { Role } from './role.entity'
 
 @Entity()
 @ObjectType()
@@ -19,6 +20,10 @@ export class User {
   @Field()
   @Column()
   uid: string
+
+  @Field(() => Role, { nullable: true })
+  @Column( { default: { name: 'user' } } )
+  role: Role
 
   @Field(() => [Observation], { nullable: 'itemsAndList' }) //can return empty array []
   @Column({ nullable: true })
