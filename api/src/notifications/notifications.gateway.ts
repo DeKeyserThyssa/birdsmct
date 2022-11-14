@@ -16,7 +16,7 @@ import { Livelocation } from 'src/livelocations/entities/livelocation.entity'
 import { UsePipes, ValidationPipe } from '@nestjs/common'
 import { MyWebSocketValidationPipe } from 'src/bootstrap/exceptions/MyWebSocketValidationPipe'
 
-@WebSocketGateway(3004)
+@WebSocketGateway() // als je geen poort zet, dan draait hij opdezelfde poort als de frontend
 export class NotificationsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
