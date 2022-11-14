@@ -1,5 +1,5 @@
 <template>
-  <route-holder :title="`Hi, ${user?.displayName}`">
+  <route-holder :title="title">
     <template #header-actions>
       <button
         class="@dark:bg-neutral-50 @dark:text-neutral-800 rounded-md bg-neutral-800 px-4 py-2 text-white"
@@ -26,6 +26,23 @@
           <label for="server"> Connect to server </label>
         </div>
       </div>
+
+      <div class="span-2">
+        <h2 class="font-theme mb-3 text-2xl font-medium tracking-wide">
+          Language
+        </h2>
+        <label class="block" for="language"> Select language </label>
+        <select
+          id="language"
+          name="language"
+          class="rounded-md bg-neutral-50 px-4 py-2"
+          @change="setLocale"
+        >
+          <option v-for="locale of AVAILABLE_LOCALES" :value="locale">
+            {{ locale }}
+          </option>
+        </select>
+      </div>
     </div>
 
     <div v-if="customUser">
@@ -47,6 +64,8 @@ import ObservationsTable from '../components/observation/ObservationsTable.vue'
 import useSocket from '../composables/useSocket'
 
 import { ref, watch } from 'vue'
+import usei18n from '../composables/usei18n'
+import { computed } from '@vue/reactivity'
 
 export default {
   components: {
@@ -58,6 +77,7 @@ export default {
     const { user, logout } = useAuthentication()
     const { customUser } = useCustomUser()
     const { replace } = useRouter()
+    const { AVAILABLE_LOCALES, loadLocale, t } = usei18n()
     const { connectToServer, disconnectFromServer, connected } = useSocket()
 
     const connectedToServer = ref<boolean>(connected.value)
@@ -68,12 +88,19 @@ export default {
       })
     }
 
+    const title = computed(() =>
+      t('account.welcome', { user: user.value?.displayName }),
+    )
+
+    const setLocale = (event: Event) => {
+      const target = event.target as HTMLSelectElement
+      loadLocale(target.value)
+    }
+
     const getToken = async () => {
       // console.log(await user.value?.getIdToken())
     }
-
     getToken()
-
     watch(connectedToServer, () => {
       if (connectedToServer.value === true) {
         connectToServer()
@@ -81,16 +108,18 @@ export default {
         disconnectFromServer()
       }
     })
-
     console.log('Connecting')
     connectToServer()
 
     return {
+      AVAILABLE_LOCALES,
       user,
       customUser,
       connectedToServer,
+      title,
 
       handleLogOut,
+      setLocale,
     }
   },
 }
