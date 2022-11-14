@@ -11,10 +11,14 @@ export class DatabaseSeedCommand {
     describe: 'seed the database',
   })
   async seed() {
-    console.log('🌱 Start seeding')
+    console.log('🌱 Start seeding Birds')
     const r = await this.seedService.addAllBirds()
     console.log(r)
-    console.log('🌱 Seeding done 🏁')
+    console.log('🌱 Seeding Birds done 🏁')
+    console.log('🌱 Start Locations Birds')
+    const l = await this.seedService.addAllLocations()
+    console.log(l)
+    console.log('🌱 Seeding Locations done 🏁')
   }
 
   @Command({
@@ -27,21 +31,21 @@ export class DatabaseSeedCommand {
     console.log('🌱 Deleting done 🏁')
   }
 
-  @Command({
-    command: 'seed:database:locations',
-    describe: 'seed the database with a couple of locations',
-  })
-  async seedLocations() {
-    const r = await this.seedService.addAllLocations()
-    console.log(`Added ${r.length} locations`, r)
-  }
+  // @Command({
+  //   command: 'seed:database:locations',
+  //   describe: 'seed the database with a couple of locations',
+  // })
+  // async seedLocations() {
+  //   const r = await this.seedService.addAllLocations()
+  //   console.log(`Added ${r.length} locations`, r)
+  // }
 
-  @Command({
-    command: 'seed:database:observations',
-    describe: 'seed the database with a couple of observations',
-  })
-  async seedObservations() {
-    const r = await this.seedService.addAllObservations()
-    console.log(`Added ${r.length} locations`, r)
-  }
+  // @Command({
+  //   command: 'seed:database:observations',
+  //   describe: 'seed the database with a couple of observations',
+  // })
+  // async seedObservations() {
+  //   const r = await this.seedService.addAllObservations()
+  //   console.log(`Added ${r.length} locations`, r)
+  // }
 }
