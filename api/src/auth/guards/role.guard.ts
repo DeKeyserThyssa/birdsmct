@@ -16,14 +16,11 @@ export const RolesGuard = (roles: string[]) => {
       const ctx = GqlExecutionContext.create(context)
       const user = ctx.getContext().req.user
 
-      const customUser = await this.usersService.findOneBy(user.uid)
+      const { role } = await this.usersService.findOneBy(user.uid)
 
-      console.log(customUser)
-      console.log({ user })
-
-      console.log(roles);
-      
-      return roles.includes(customUser.role.name)
+      // TODO: what if there are no roles required?
+      // TODO: what if there are no roles on the user?
+      return roles.includes(role.name)
     }
   }
 
