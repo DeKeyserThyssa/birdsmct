@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Bird } from '../birds/entities/bird.entity'
 import { Repository } from 'typeorm'
-import * as jsonBirdsSeed from './data/scraped-birds.json' //tsconfig "resolveJsonModule": true,
-import { plainToInstance } from 'class-transformer' //https://www.npmjs.com/package/class-transformer
 import { Polygon } from 'geojson'
-import { Area } from 'src/areas/entities/area.entity'
-import { Observation } from 'src/observations/entities/observation.entity'
 
+import { Area } from 'src/areas/entities/area.entity'
+import { Bird } from '../birds/entities/bird.entity'
+import * as jsonBirdsSeed from './data/scraped-birds.json' 
 @Injectable()
 export class DatabaseSeedService {
   constructor(
@@ -15,8 +13,6 @@ export class DatabaseSeedService {
     private birdsRepository: Repository<Bird>,
     @InjectRepository(Area)
     private areasRepository: Repository<Area>,
-    @InjectRepository(Observation)
-    private observationsRepository: Repository<Observation>,
   ) {}
 
   async addAllBirds(): Promise<Bird[]> {
@@ -119,32 +115,6 @@ export class DatabaseSeedService {
     areas.push(blaarmeeresen)
 
     return this.areasRepository.save(areas)
-  }
-
-  async addAllObservations(): Promise<Observation[]> {
-    const observations: Observation[] = []
-    const birds = await this.birdsRepository.find()
-    const locations = await this.areasRepository.find()
-    const spottedB = birds[0]
-    spottedB.observations += 1
-    await this.birdsRepository.save(spottedB)
-    const { createdAt, updatedAt, ...embeddedBird } = spottedB
-
-    const obs = new Observation()
-    obs.name = 'manueel toegevoegd'
-    obs.userId = 'abc123'
-    obs.birdId = birds[0].id.toString()
-    obs.areaId = locations[0].id.toString()
-    obs.geolocation = {
-      type: 'Point',
-      coordinates: [3.2532747, 50.8233769],
-    }
-
-    obs.bird = embeddedBird //birds[0]
-    obs.area = locations[0]
-
-    observations.push(obs)
-    return await this.observationsRepository.save(observations)
   }
 
   async deleteAllBirds(): Promise<void> {
