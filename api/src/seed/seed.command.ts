@@ -15,10 +15,10 @@ export class DatabaseSeedCommand {
     const r = await this.seedService.addAllBirds()
     console.log(r)
     console.log('🌱 Seeding Birds done 🏁')
-    console.log('🌱 Start Locations Birds')
-    const l = await this.seedService.addAllLocations()
-    console.log(l)
-    console.log('🌱 Seeding Locations done 🏁')
+    // console.log('🌱 Start Locations Birds')
+    // const l = await this.seedService.addAllLocations()
+    // console.log(l)
+    // console.log('🌱 Seeding Locations done 🏁')
   }
 
   @Command({

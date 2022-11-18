@@ -1,3 +1,6 @@
+// @ts-nocheck
+// This is js file
+
 import fs, { promises as fsPromises } from 'fs'
 import path from 'path'
 import process from 'process'

@@ -35,10 +35,14 @@
         <select
           id="language"
           name="language"
-          class="rounded-md bg-neutral-50 px-4 py-2"
+          class="@dark:bg-neutral-700 rounded-md bg-neutral-50 px-4 py-2"
           @change="setLocale"
         >
-          <option v-for="locale of AVAILABLE_LOCALES" :value="locale">
+          <option
+            v-for="locale of AVAILABLE_LOCALES"
+            :value="locale"
+            :key="locale"
+          >
             {{ locale }}
           </option>
         </select>
