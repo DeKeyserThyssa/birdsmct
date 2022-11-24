@@ -1,8 +1,8 @@
-import { CreateAreaInput } from './create-area.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
+import { CreateAreaInput } from './create-area.input'
+import { InputType, Field, PartialType } from '@nestjs/graphql'
 
 @InputType()
 export class UpdateAreaInput extends PartialType(CreateAreaInput) {
   @Field()
-  id: string;
+  id: string
 }

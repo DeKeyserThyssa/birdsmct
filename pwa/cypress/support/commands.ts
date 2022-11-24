@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+// import useAuthentication from '../../src/composables/useAuthentication'
+
+// const { login } = useAuthentication()
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -11,7 +14,10 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
+// Cypress.Commands.add('login', (email, password) => {})
+// Cypress.Commands.add('login', (email, password) => {
+//     return login(email, password)
+// })
 //
 //
 // -- This is a child command --

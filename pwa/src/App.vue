@@ -11,13 +11,10 @@ import useGraphQL from './composables/useGraphQL'
 import useCustomUser from './composables/useCustomUser'
 import useAuthentication from './composables/useAuthentication'
 export default {
-  setup() {
-    const { user } = useAuthentication()
+setup() {
     const { apolloClient } = useGraphQL()
-    const { loadCustomUser } = useCustomUser()
-    provide(DefaultApolloClient, apolloClient)
 
-    if (user.value) loadCustomUser(user.value.uid)
+    provide(DefaultApolloClient, apolloClient)
 
     return {}
   },

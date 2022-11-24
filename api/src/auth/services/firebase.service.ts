@@ -12,9 +12,15 @@ export class FirebaseService {
       credential: applicationDefault(), // Not always the case!
     })
 
-    if (!this.app) throw new Error('Firebase app not initialized')
+    // Any, because the type is not sure yet; there can be value set, or
+    // Bash script
+    // 
+    if (!(this.app.options.credential as any).projectId)
+      throw new Error(
+        '\n\n⛔️ Firebase app not initialized.\nYou probably forgot to set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable.\n',
+      )
   }
 
-  // Eigen ....... firebase getAuth()
+  // Eigen getAuth vs firebase getAuth()
   getAuth = (): Auth => getAuth()
 }

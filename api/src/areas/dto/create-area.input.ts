@@ -1,9 +1,14 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
-import { Type } from 'class-transformer';
-import { IsNotEmpty, IsString, MinLength, ValidateNested } from 'class-validator';
-import { Polygon } from 'geojson';
+import { InputType, Field } from '@nestjs/graphql'
+import { Type } from 'class-transformer'
+import {
+  IsNotEmpty,
+  IsString,
+  MinLength,
+  ValidateNested,
+} from 'class-validator'
+import { Polygon } from 'geojson'
 
-import { Surface } from '../entities/surface.area';
+import { Surface } from '../entities/surface.area'
 
 @InputType()
 export class CreateAreaInput {
@@ -11,7 +16,7 @@ export class CreateAreaInput {
   @IsNotEmpty() // Validation
   @MinLength(5)
   @Field() // GraphQL
-  name: string;
+  name: string
 
   @IsNotEmpty() // Validation
   @ValidateNested()

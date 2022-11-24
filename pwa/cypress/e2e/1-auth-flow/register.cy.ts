@@ -1,48 +1,26 @@
-import {
-  Auth,
-  connectAuthEmulator,
-  initializeAuth,
-  signInWithEmailAndPassword,
-  UserCredential,
-  indexedDBLocalPersistence,
-} from 'firebase/auth';
+/// <reference types="cypress" />
 
-function getAuthEmulatorHost() {
-  const host = Cypress.env('NEXT_PUBLIC_FIREBASE_EMULATOR_HOST') as string;
-  const port = Cypress.env('NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_PORT') as string;
+// beforeAll(() => {
+//   // delete the user in firebase
+//   // cy.request({})
+// })
 
-  return ['http://', host, ':', port].join('');
-}
+describe('check if user can create an account (register)', () => {
+  it('should be able to visit register', () => {
+    cy.visit(`${Cypress.env('APP_URL')}/auth/register`)
+  })
 
-let auth: Auth;
+  it('should be able to fill out the form', () => {
+    cy.get('[data-cy="name"]').type(Cypress.env('USER'))
+    cy.get('[data-cy="email"]').type(Cypress.env('EMAIL'))
+    cy.get('[data-cy="password"]').type(Cypress.env('PASSWORD'))
 
-function getAuth() {
-  const app = createFirebaseApp();
+    cy.get('[data-cy="register"]').click()
+  })
 
-  auth =
-    auth ||
-    initializeAuth(app, {
-      persistence: indexedDBLocalPersistence,
-    });
-
-  connectAuthEmulator(auth, getAuthEmulatorHost());
-
-  return auth;
-}
-
-
-describe('empty spec', () => {
-  it('passes', () => {
-    cy.visit('http://localhost:5173/auth/register')
-    cy.get('h2').contains('Register')
-
-    // i18n?
-
-    // firebase?
-
-    // graphql => custom user...
-    // apollo
+  it('should be able to see the user name in the header (login)', () => {
+    cy.url().then((url) => {
+      cy.get('[data-cy="user-name"]').contains(Cypress.env('USER'))
+    })
   })
 })
-
-// npx firebase-tools --version

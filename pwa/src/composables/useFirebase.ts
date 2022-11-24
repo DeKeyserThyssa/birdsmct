@@ -4,6 +4,7 @@ import {
   Auth,
   setPersistence,
   browserLocalPersistence,
+  connectAuthEmulator,
 } from 'firebase/auth'
 
 const firebaseConfig: FirebaseOptions = {
@@ -19,7 +20,12 @@ const app: FirebaseApp = initializeApp(firebaseConfig)
 
 const auth: Auth = getAuth()
 setPersistence(auth, browserLocalPersistence)
-
+;(async () => {
+  // @ts-ignore
+  if (window.Cypress)
+    // @ts-ignore
+    connectAuthEmulator(auth, Cypress.env('FIREBASE_EMULATION_URL'))
+})()
 export default () => {
   return {
     app,

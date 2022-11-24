@@ -78,7 +78,7 @@ async function generateMessagesForLocales(auth) {
 
   AVAILABLE_LOCALES.map(async (locale) => {
     const res = await sheets.spreadsheets.values.get({
-      spreadsheetId: '1XtHJVf7jJGY-im3M6Au8gW-A_J32BW5pAsEo8VLucpg',
+      spreadsheetId: '12g6UrQHzJ6nZpS0zfvciPM-8WxyXTsLmrXdZNa-g5_Y',
       range: locale,
     })
     const rows = res.data.values
